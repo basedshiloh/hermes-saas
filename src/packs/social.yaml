@@ -1,0 +1,38 @@
+id: social
+name: Social Media
+description: Content ideation, research, and automated social media content creation with your Hermes agent.
+icon: share
+tabs:
+  - id: content-ideas
+    title: Content Ideas
+    type: tool
+    description: Research trending topics and generate content ideas for your audience.
+    icon: lightbulb
+  - id: content-calendar
+    title: Content Calendar
+    type: tool
+    description: Plan and organize your content schedule across platforms.
+    icon: calendar
+  - id: post-writer
+    title: Post Writer
+    type: tool
+    description: Write engaging posts for Twitter/X, LinkedIn, Instagram, and more.
+    icon: pencil
+  - id: analytics
+    title: Analytics
+    type: report
+    description: Track engagement metrics and content performance insights.
+    icon: chart
+skills:
+  - content_ideation.md
+  - social_writer.md
+  - content_calendar.md
+  - engagement_analytics.md
+defaultTools:
+  - web_search
+  - browser
+starterPrompts:
+  - "Generate 10 content ideas about {{topic}} for {{platform}}"
+  - "Write a week of LinkedIn posts about {{topic}}"
+  - "Research trending topics in {{industry}} right now"
+  - "Create a 30-day content calendar for {{brand}}"

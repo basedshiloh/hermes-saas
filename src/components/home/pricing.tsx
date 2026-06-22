@@ -39,38 +39,38 @@ const pricingPlans: Plan[] = [
 
 const pricingPlanData: Record<PlanId, PlanData> = {
   starter: {
-    monthly: 2500,
-    yearly: 25000,
+    monthly: 29,
+    yearly: 290,
     activeCount: 5,
     description:
-      'Big sound in a small package. The S1 is a sleek, portable Bluetooth speaker with rich audio and all-day battery life',
+      'Your own managed Hermes agent with BYOK model access, 1 use-case pack, and auto-sleep to keep costs low.',
   },
   pro: {
-    monthly: 4190,
-    yearly: 41900,
+    monthly: 69,
+    yearly: 690,
     activeCount: 7,
     description:
-      'Built for growing teams with advanced automation, priority workflows, and deeper analytics to keep everything moving.',
+      'Everything in Starter plus all use-case packs, priority provisioning, longer idle timeouts, and advanced agent configuration.',
   },
   business: {
-    monthly: 8290,
-    yearly: 82900,
+    monthly: 149,
+    yearly: 1490,
     activeCount: 9,
     description:
-      'Enterprise-grade controls with custom workflows, team-wide governance, and dedicated support for large-scale operations.',
+      'Dedicated VM isolation, all packs, custom Hermes skills, priority support, and the highest resource limits for demanding workloads.',
   },
 };
 
 const includedItems: string[] = [
-  'Delaware franchise tax',
-  'State income tax',
-  'Foreign founders',
-  'Foreign subsidiary',
-  'R&D tax credits',
-  'Sales tax nexus',
-  'Employment tax nexus',
-  'Property tax nexus',
-  'Income tax nexus',
+  'Managed Hermes agent',
+  'BYOK model access',
+  'Auto-sleep & wake-on-demand',
+  'Chat dashboard',
+  'All use-case packs',
+  'Custom Hermes skills',
+  'Priority provisioning',
+  'Dedicated VM isolation',
+  'Priority support',
 ];
 
 const Pricing = () => {
@@ -283,7 +283,7 @@ const Pricing = () => {
                     <div className="flex items-center justify-between">
                       <h3 className="text-heading-6">Subscription</h3>
                       <h3 className="text-heading-4 font-medium">
-                        $
+                        &euro;
                         <NumberFlow
                           value={price}
                           format={{
@@ -319,7 +319,7 @@ const Pricing = () => {
                     </span>
                   </div>
 
-                  <Link href="/contact">
+                  <Link href="/sign-up">
                     <ButtonPrimary
                       className="w-full"
                       textClassName="text-center flex-1 px-0! pr-8!"

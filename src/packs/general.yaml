@@ -1,0 +1,35 @@
+id: general
+name: General Assistant
+description: Open-ended AI assistant for coding, research, business tasks, and anything else you need.
+icon: sparkles
+tabs:
+  - id: workspace
+    title: Workspace
+    type: tool
+    description: A flexible workspace for file management, coding, and project tasks.
+    icon: folder
+  - id: research
+    title: Research
+    type: tool
+    description: Deep research on any topic with web browsing and analysis.
+    icon: search
+  - id: automations
+    title: Automations
+    type: tool
+    description: Set up cron jobs and automated workflows for recurring tasks.
+    icon: repeat
+skills:
+  - general_assistant.md
+  - code_helper.md
+  - research_agent.md
+  - task_automation.md
+defaultTools:
+  - web_search
+  - browser
+  - terminal
+  - file_ops
+starterPrompts:
+  - "Help me research {{topic}} and summarize the key findings"
+  - "Write a Python script that {{task}}"
+  - "Set up a daily automation to {{task}}"
+  - "Analyze this document and extract the key insights"

@@ -1,0 +1,65 @@
+{
+  "node": {
+    "00cf72fc85576250c04439ab9dcee8e78d7a53136f": {
+      "workers": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": {
+          "moduleId": 36654,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "006204a10d2b9eba9edc61261f8e0c9e7b65f8069e": {
+      "workers": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": {
+          "moduleId": 36654,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "007f5e00c5e6ea16b584b2d7b62ee9b94190f041f0": {
+      "workers": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": {
+          "moduleId": 36654,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "407dced5851a713a4006f2c541cd3d9484f75cb458": {
+      "workers": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": {
+          "moduleId": 36654,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/[[...sign-in]]/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    }
+  },
+  "edge": {}
+}

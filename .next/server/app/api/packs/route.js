@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/packs/route.js")
+R.c("server/chunks/[root-of-the-server]__eecb699c._.js")
+R.c("server/chunks/71a04_next_dist_esm_build_templates_app-route_dbb78da1.js")
+R.c("server/chunks/[root-of-the-server]__b346a7bb._.js")
+R.c("server/chunks/[root-of-the-server]__9babeb13._.js")
+R.c("server/chunks/71a04_22e343ae._.js")
+R.c("server/chunks/71a04_next_dist_9011d190._.js")
+R.c("server/chunks/60b31_hermes-saas__next-internal_server_app_api_packs_route_actions_7724612a.js")
+R.m(50296)
+module.exports=R.m(50296).exports

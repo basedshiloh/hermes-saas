@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String   @id @default(cuid())
+  clerkId         String   @unique
+  email           String   @unique
+  name            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  subscription    Subscription?
+  agentInstance   AgentInstance?
+  modelKeys       ModelKey[]
+  packsEnabled    PackEnabled[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Subscription {
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId  String             @unique
+  stripeSubId       String?            @unique
+  plan              Plan               @default(STARTER)
+  status            SubscriptionStatus @default(INCOMPLETE)
+  currentPeriodEnd  DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@map("subscriptions")
+}
+
+enum Plan {
+  STARTER
+  PRO
+  BUSINESS
+}
+
+enum SubscriptionStatus {
+  INCOMPLETE
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+model AgentInstance {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provisionerType String        @default("docker")
+  containerId     String?
+  vmId            String?
+  internalHost    String?
+  port            Int?
+  state           InstanceState @default(PENDING)
+  region          String?
+  lastActiveAt    DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  provisioningJobs ProvisioningJob[]
+  usageEvents      UsageEvent[]
+
+  @@map("agent_instances")
+}
+
+enum InstanceState {
+  PENDING
+  PROVISIONING
+  RUNNING
+  SLEEPING
+  ERROR
+  DESTROYED
+}
+
+model ProvisioningJob {
+  id          String            @id @default(cuid())
+  instanceId  String
+  instance    AgentInstance     @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  stage       ProvisioningStage @default(QUEUED)
+  progress    Int               @default(0)
+  error       String?
+  startedAt   DateTime          @default(now())
+  completedAt DateTime?
+
+  @@map("provisioning_jobs")
+}
+
+enum ProvisioningStage {
+  QUEUED
+  ALLOCATING_HOST
+  PULLING_IMAGE
+  STARTING_CONTAINER
+  INSTALLING_HERMES
+  CONFIGURING_GATEWAY
+  HEALTH_CHECK
+  READY
+  FAILED
+}
+
+model ModelKey {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     String
+  encryptedKey String
+  label        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("model_keys")
+}
+
+model PackEnabled {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  packId          String
+  configOverrides Json?
+  createdAt       DateTime @default(now())
+
+  @@unique([userId, packId])
+  @@map("packs_enabled")
+}
+
+model UsageEvent {
+  id          String   @id @default(cuid())
+  instanceId  String
+  instance    AgentInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  type        String
+  tokensIn    Int      @default(0)
+  tokensOut   Int      @default(0)
+  costEstimate Float   @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("usage_events")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_log")
+}

@@ -134,7 +134,7 @@ const Navbar = () => {
             </nav>
 
             <div className="hidden items-center justify-center xl:flex">
-              <Link href="/signup" className="inline-block" aria-label="Get started">
+              <Link href="/sign-up" className="inline-block" aria-label="Get started">
                 <ButtonPrimary>Get started</ButtonPrimary>
               </Link>
             </div>

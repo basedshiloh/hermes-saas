@@ -1,0 +1,38 @@
+id: seo
+name: SEO Automation
+description: Keyword research, competitor analysis, and SEO-optimized content writing powered by your Hermes agent.
+icon: search
+tabs:
+  - id: keyword-research
+    title: Keyword Research
+    type: tool
+    description: Discover low-competition keywords and analyze search trends for your niche.
+    icon: target
+  - id: competitor-analysis
+    title: Competitor Analysis
+    type: tool
+    description: Analyze competitor content, backlinks, and ranking strategies.
+    icon: chart
+  - id: content-writer
+    title: Content Writer
+    type: tool
+    description: Generate SEO-optimized articles, meta descriptions, and title tags.
+    icon: pencil
+  - id: seo-audit
+    title: SEO Audit
+    type: report
+    description: Get a comprehensive audit of your site's on-page SEO health.
+    icon: clipboard
+skills:
+  - keyword_research.md
+  - competitor_analysis.md
+  - onpage_seo_writer.md
+  - seo_audit.md
+defaultTools:
+  - web_search
+  - browser
+starterPrompts:
+  - "Find 20 low-competition keywords for {{niche}}"
+  - "Analyze the top 5 ranking pages for {{keyword}}"
+  - "Write an SEO-optimized article about {{topic}}"
+  - "Audit the on-page SEO for {{url}}"
