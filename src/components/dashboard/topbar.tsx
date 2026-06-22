@@ -2,6 +2,12 @@
 
 import { UserButton } from "@clerk/nextjs";
 
+// Clerk components only mount when its key is configured (inlined at build
+// time). Until then the dashboard still renders with a placeholder avatar.
+const clerkEnabled = Boolean(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+);
+
 export default function Topbar({
   instanceState,
 }: {
@@ -32,13 +38,17 @@ export default function Topbar({
         )}
       </div>
       <div className="flex items-center gap-4">
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "size-8",
-            },
-          }}
-        />
+        {clerkEnabled ? (
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "size-8",
+              },
+            }}
+          />
+        ) : (
+          <div className="bg-background-7 size-8 rounded-full" />
+        )}
       </div>
     </header>
   );
