@@ -1,18 +1,20 @@
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 
 const globalForPrisma = globalThis as unknown as {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  prisma: any;
+  prisma: PrismaClient | undefined;
 };
 
-function createClient() {
-  // Prisma v7 requires adapter or accelerateUrl; use accelerateUrl with DATABASE_URL
-  // In production with Neon, replace with @prisma/adapter-neon for better serverless perf
-  return new PrismaClient({
-    accelerateUrl: process.env.DATABASE_URL!,
+function getClient(): PrismaClient {
+  if (globalForPrisma.prisma) return globalForPrisma.prisma;
+  const client = new PrismaClient({
+    adapter: undefined as never,
   });
+  if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = client;
+  return client;
 }
 
-export const db = globalForPrisma.prisma ?? createClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+export const db = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    return (getClient() as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});
