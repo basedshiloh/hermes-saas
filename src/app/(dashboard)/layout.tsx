@@ -1,5 +1,9 @@
 import { ReactNode } from "react";
 
+// Dashboard is per-user and auth-gated, so it must never be prerendered at
+// build time (Clerk components require a request context). Render on demand.
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: {
