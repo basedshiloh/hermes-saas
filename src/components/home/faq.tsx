@@ -14,40 +14,40 @@ import Link from 'next/link';
 
 const faqItems = [
   {
-    value: 'what-does-nexsas-automate',
-    question: 'What does Nexsas automate?',
+    value: 'what-is-hermes-agent',
+    question: 'What is Hermes Agent?',
     answer:
-      'Nexsas connects your tools and automates repetitive tasks like routing requests, updating records, sending notifications, and syncing data across your stack.',
+      'Hermes Agent is an open-source AI agent created by Nous Research. It can browse the web, execute code, manage files, run on schedules, and perform 40+ actions — all through a chat interface. We host and manage it for you so you never need to touch a server.',
   },
   {
-    value: 'which-apps-can-i-connect',
-    question: 'Which apps can I connect?',
+    value: 'do-i-need-technical-knowledge',
+    question: 'Do I need technical knowledge?',
     answer:
-      'Connect CRMs, project tools, email, forms, spreadsheets, and databases. Mix multiple integrations in one workflow to keep data synced across teams.',
+      'Not at all. Our platform is designed for non-technical professionals. Just pick a Pack for your profession, click deploy, and start chatting with your agent. No terminal, no Docker, no server configuration required.',
   },
   {
-    value: 'multi-step-workflows',
-    question: 'Can I build multi-step workflows?',
+    value: 'what-models-can-i-use',
+    question: 'What models can I use?',
     answer:
-      'Yes. Create triggers, conditions, approvals, delays, and branching logic. You can also retry failed steps and route exceptions to the right person automatically.',
+      'You can access 200+ AI models through OpenRouter using your own API key (BYOK). This includes models from OpenAI, Anthropic, Google, Meta, Mistral, and many more. Switch models anytime from your dashboard.',
   },
   {
-    value: 'is-my-data-secure',
-    question: 'Is my data secure?',
+    value: 'how-does-byok-work',
+    question: 'How does BYOK work?',
     answer:
-      'We use encryption in transit and at rest, strict access controls, and audit-friendly logs. You decide which connections and actions each workflow is allowed to run.',
+      'BYOK stands for Bring Your Own Key. You provide your own OpenRouter API key, and your agent uses it to access any supported model. You pay model providers directly at their rates — we never mark up model costs.',
   },
   {
-    value: 'coding-skills-required',
-    question: 'Do I need coding skills to use Nexsas?',
+    value: 'what-are-packs',
+    question: 'What are Packs?',
     answer:
-      'No. Start with templates and a visual builder. If you want advanced customization, you can add rules, webhooks, and custom fields without changing your existing tools.',
+      'Packs are pre-built agent configurations tailored to specific professions. Each Pack comes with optimized prompts, tools, and skills for roles like SEO Manager, Social Media Manager, Engineer, Student/Researcher, or a blank General Pack you can customize from scratch.',
   },
   {
-    value: 'monitor-runs-and-troubleshoot',
-    question: 'How do I monitor runs and troubleshoot failures?',
+    value: 'can-i-cancel-anytime',
+    question: 'Can I cancel anytime?',
     answer:
-      'Every automation stores run history with timestamps, outcomes, and step-level detail. You can filter errors, set notifications when something breaks, pause a workflow safely, and replay or fix failed steps without losing context.',
+      'Yes. There are no long-term contracts or cancellation fees. You can cancel your subscription at any time from your dashboard and your agent will remain active until the end of your billing period.',
   },
 ];
 
@@ -69,8 +69,8 @@ const FAQ = () => {
                   </TextReveal>
                   <TextReveal delay={0.3}>
                     <p className="text-background-14/60 mx-auto max-w-[450px] lg:mx-0">
-                      We&apos;ve gathered the most commonly asked questions to help you understand
-                      our services, workflow, pricing, and support.
+                      Everything you need to know about managed Hermes Agent — from setup and
+                      pricing to models and cancellation.
                     </p>
                   </TextReveal>
                 </div>

@@ -1,4 +1,7 @@
-"use client";
+'use client';
+
+const inputClassName =
+  'w-full rounded-md border border-stroke-5/25 bg-transparent px-4.5 py-3 text-accent/90 placeholder:text-primary-50/40 focus:outline-none font-inter-tight text-tagline-2 font-normal';
 
 export default function ChatInput({
   value,
@@ -10,42 +13,31 @@ export default function ChatInput({
   onSend: () => void;
 }) {
   return (
-    <div className="border-stroke-5 border-t p-4">
-      <div className="mx-auto max-w-3xl">
-        <div className="bg-background-7 border-stroke-5 flex items-end gap-3 rounded-xl border p-3">
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                onSend();
-              }
-            }}
-            placeholder="Message your Hermes agent..."
-            rows={1}
-            className="max-h-32 min-h-[40px] flex-1 resize-none bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none"
-          />
-          <button
-            onClick={onSend}
-            disabled={!value.trim()}
-            className="bg-primary-600 hover:bg-primary-700 flex size-9 shrink-0 items-center justify-center rounded-lg text-white transition-colors disabled:opacity-40"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M22 2 11 13" />
-              <path d="M22 2 15 22 11 13 2 9z" />
-            </svg>
-          </button>
-        </div>
+    <div className="border-stroke-5 bg-background-5 border-t px-6 py-4">
+      <div className="mx-auto flex max-w-3xl items-end gap-3">
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              onSend();
+            }
+          }}
+          placeholder="Message your Hermes agent..."
+          rows={1}
+          className={`${inputClassName} max-h-32 min-h-[44px] flex-1 resize-none`}
+        />
+        <button
+          onClick={onSend}
+          disabled={!value.trim()}
+          className="bg-secondary flex size-11 shrink-0 items-center justify-center rounded-full text-white transition-opacity disabled:opacity-30"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 2 11 13" />
+            <path d="M22 2 15 22 11 13 2 9z" />
+          </svg>
+        </button>
       </div>
     </div>
   );

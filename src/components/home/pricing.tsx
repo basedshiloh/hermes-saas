@@ -319,7 +319,7 @@ const Pricing = () => {
                     </span>
                   </div>
 
-                  <Link href="/sign-up">
+                  <Link href="/signup">
                     <ButtonPrimary
                       className="w-full"
                       textClassName="text-center flex-1 px-0! pr-8!"

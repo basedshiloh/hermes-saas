@@ -30,28 +30,20 @@
       "namedRegex": "^/blog/(?<nxtPslug>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/dashboard/[packTab]",
+      "regex": "^/dashboard/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpackTab": "nxtPpackTab"
+      },
+      "namedRegex": "^/dashboard/(?<nxtPpackTab>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/services/[slug]",
       "regex": "^/services/([^/]+?)(?:/)?$",
       "routeKeys": {
         "nxtPslug": "nxtPslug"
       },
       "namedRegex": "^/services/(?<nxtPslug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/sign-in/[[...sign-in]]",
-      "regex": "^/sign\\-in(?:/(.+?))?(?:/)?$",
-      "routeKeys": {
-        "nxtPsignin": "nxtPsign-in"
-      },
-      "namedRegex": "^/sign\\-in(?:/(?<nxtPsignin>.+?))?(?:/)?$"
-    },
-    {
-      "page": "/sign-up/[[...sign-up]]",
-      "regex": "^/sign\\-up(?:/(.+?))?(?:/)?$",
-      "routeKeys": {
-        "nxtPsignup": "nxtPsign-up"
-      },
-      "namedRegex": "^/sign\\-up(?:/(?<nxtPsignup>.+?))?(?:/)?$"
     },
     {
       "page": "/team/[slug]",
@@ -86,48 +78,6 @@
       "regex": "^/about(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/about(?:/)?$"
-    },
-    {
-      "page": "/api/billing/checkout",
-      "regex": "^/api/billing/checkout(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/billing/checkout(?:/)?$"
-    },
-    {
-      "page": "/api/instance",
-      "regex": "^/api/instance(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/instance(?:/)?$"
-    },
-    {
-      "page": "/api/instance/start",
-      "regex": "^/api/instance/start(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/instance/start(?:/)?$"
-    },
-    {
-      "page": "/api/instance/stop",
-      "regex": "^/api/instance/stop(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/instance/stop(?:/)?$"
-    },
-    {
-      "page": "/api/keys",
-      "regex": "^/api/keys(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/keys(?:/)?$"
-    },
-    {
-      "page": "/api/packs",
-      "regex": "^/api/packs(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/packs(?:/)?$"
-    },
-    {
-      "page": "/api/webhooks/stripe",
-      "regex": "^/api/webhooks/stripe(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/webhooks/stripe(?:/)?$"
     },
     {
       "page": "/blog",
@@ -178,6 +128,12 @@
       "namedRegex": "^/features(?:/)?$"
     },
     {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
       "page": "/pricing",
       "regex": "^/pricing(?:/)?$",
       "routeKeys": {},
@@ -188,6 +144,12 @@
       "regex": "^/services(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/services(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
     },
     {
       "page": "/team",

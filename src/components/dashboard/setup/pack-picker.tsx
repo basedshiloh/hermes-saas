@@ -1,43 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { cn } from '@/src/utils/cn';
+import { PACKS } from '@/src/data/mock-dashboard';
+import { useState } from 'react';
+import { ButtonPrimary } from '@/src/components/shared/ui/button';
 
-interface PackOption {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-}
-
-const PACKS: PackOption[] = [
-  {
-    id: "seo",
-    name: "SEO Automation",
-    description:
-      "Keyword research, competitor analysis, and SEO-optimized content writing.",
-    icon: "🔍",
-  },
-  {
-    id: "social",
-    name: "Social Media",
-    description:
-      "Content ideation, scheduling, and automated social media post creation.",
-    icon: "📱",
-  },
-  {
-    id: "general",
-    name: "General Assistant",
-    description:
-      "Open-ended assistant for coding, research, business tasks, and more.",
-    icon: "✨",
-  },
-];
-
-export default function PackPicker({
-  onSubmit,
-}: {
-  onSubmit: (packs: string[]) => void;
-}) {
+export default function PackPicker({ onSubmit }: { onSubmit: (packs: string[]) => void }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   function toggle(id: string) {
@@ -50,45 +18,39 @@ export default function PackPicker({
   }
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-semibold text-white">
-          What will you use Hermes for?
-        </h2>
-        <p className="text-sm text-white/50">
-          Pick one or more use cases. This configures your dashboard tabs and
-          pre-loads relevant tools. You can change this later.
+    <div className="space-y-10">
+      <div className="space-y-3 text-center">
+        <h2 className="text-heading-4 font-inter-tight text-accent">What do you do?</h2>
+        <p className="text-tagline-1 font-inter-tight text-primary-50/50 mx-auto max-w-[520px] font-normal">
+          Pick your role and we&apos;ll pre-configure your agent with the right tools, skills, and dashboard tabs. You can change this later.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
         {PACKS.map((pack) => {
           const isSelected = selected.has(pack.id);
           return (
             <button
               key={pack.id}
               onClick={() => toggle(pack.id)}
-              className={`space-y-3 rounded-xl border p-6 text-left transition-all ${
+              className={cn(
+                'border-stroke-5 space-y-4 rounded-xl border p-6 text-left transition-all',
                 isSelected
-                  ? "border-primary-500 bg-primary-600/10"
-                  : "border-stroke-5 bg-white/5 hover:border-white/20 hover:bg-white/10"
-              }`}
+                  ? 'border-primary-400 bg-primary-600/10'
+                  : 'bg-background-7 hover:border-stroke-7 hover:bg-background-9',
+              )}
             >
-              <span className="text-3xl">{pack.icon}</span>
-              <h3 className="text-lg font-medium text-white">{pack.name}</h3>
-              <p className="text-sm text-white/50">{pack.description}</p>
+              <div className="bg-secondary flex size-12 items-center justify-center rounded-2xl">
+                <span className={cn(pack.iconClass, 'text-[22px] text-white')} />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-tagline-1 font-inter-tight text-accent font-medium">{pack.name}</h3>
+                <p className="text-tagline-3 font-inter-tight text-primary-50/50 font-normal">{pack.persona}</p>
+              </div>
+              <p className="text-tagline-3 font-inter-tight text-primary-50/40 font-normal">{pack.description}</p>
               {isSelected && (
-                <span className="text-primary-400 inline-flex items-center gap-1 text-xs font-medium">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
+                <span className="text-tagline-3 font-inter-tight text-primary-300 inline-flex items-center gap-1 font-medium">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6 9 17l-5-5" /></svg>
                   Selected
                 </span>
               )}
@@ -98,13 +60,13 @@ export default function PackPicker({
       </div>
 
       <div className="flex justify-center">
-        <button
+        <ButtonPrimary
           onClick={() => onSubmit(Array.from(selected))}
           disabled={selected.size === 0}
-          className="bg-primary-600 hover:bg-primary-700 rounded-xl px-8 py-3 font-medium text-white transition-colors disabled:opacity-40"
+          className={cn(selected.size === 0 && 'opacity-40')}
         >
           Continue
-        </button>
+        </ButtonPrimary>
       </div>
     </div>
   );

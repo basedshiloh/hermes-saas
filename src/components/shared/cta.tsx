@@ -30,13 +30,13 @@ const CTA = () => {
                 <div className="space-y-3">
                   <TextReveal delay={0.4}>
                     <h2 className="mx-auto max-w-[650px]">
-                      Stop doing manual work. Start automating everything.
+                      Deploy your AI agent today. Start getting things done.
                     </h2>
                   </TextReveal>
                   <TextReveal delay={0.5}>
                     <p className="text-background-14/60 mx-auto max-w-[550px]">
-                      Replace repetitive tasks with smart automation that runs in the background,
-                      saving time, reducing errors, and letting you focus on real growth.
+                      Pick a Pack, deploy in one click, and let your managed Hermes Agent handle
+                      research, writing, analysis, scheduling, and more — while you focus on what matters.
                     </p>
                   </TextReveal>
                 </div>
@@ -48,7 +48,7 @@ const CTA = () => {
                     className="mx-auto md:mx-0 md:w-fit!"
                     textClassName="text-center text-nowrap max-sm:flex-1 max-sm:pr-8!"
                   >
-                    Create automation
+                    Deploy your agent
                   </ButtonPrimary>
                 </Link>
               </RevealAnimation>

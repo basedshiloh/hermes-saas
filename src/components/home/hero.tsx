@@ -69,21 +69,21 @@ const Hero = () => {
                 </AvatarReveal>
                 <RevealAnimation delay={0.2} direction="right" offset={50} instant>
                   <p className="text-tagline-2 text-background-14/80 mx-auto max-w-[142px] shrink-0 text-left">
-                    <CounterNumberOnScroll value={2000} delay={0.4} />+ teams shipping faster this
-                    week.
+                    <CounterNumberOnScroll value={2000} delay={0.4} />+ agents deployed this
+                    month.
                   </p>
                 </RevealAnimation>
               </div>
               <div className="space-y-4">
                 <TextReveal delay={0.3}>
                   <h1 className="mx-auto max-w-[950px]">
-                    Automate your workflows eliminate manual tasks.
+                    Your own AI agent, deployed in one click.
                   </h1>
                 </TextReveal>
                 <TextReveal delay={0.4}>
                   <p className="mx-auto max-w-[500px]">
-                    Connect your tools, design smart workflows, and automate repetitive work — so
-                    your business runs on autopilot.
+                    Pick a Pack for your profession, deploy a managed Hermes Agent, and start
+                    chatting — no servers, no terminal, no setup.
                   </p>
                 </TextReveal>
               </div>
@@ -96,7 +96,7 @@ const Hero = () => {
                     className="w-full md:w-auto"
                     textClassName="text-center text-nowrap max-sm:flex-1 max-sm:pr-8!"
                   >
-                    Start free trial
+                    Deploy your agent
                   </ButtonPrimary>
                 </Link>
                 <ButtonSecondary
@@ -104,7 +104,7 @@ const Hero = () => {
                   textClassName="text-center text-nowrap max-sm:flex-1 max-sm:pr-8!"
                   onClick={() => setAuthModalOpen(true)}
                 >
-                  Book demo
+                  See how it works
                 </ButtonSecondary>
               </div>
             </RevealAnimation>

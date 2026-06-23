@@ -18,12 +18,12 @@ const Integration = () => {
 
             <div className="space-y-3">
               <TextReveal delay={0.2}>
-                <h2 className="mx-auto max-w-[600px]">Your entire tech stack — fully connected</h2>
+                <h2 className="mx-auto max-w-[600px]">200+ model providers & integrations</h2>
               </TextReveal>
               <TextReveal delay={0.3}>
                 <p className="text-background-14/60 mx-auto max-w-[592px]">
-                  Integrate your favorite apps and build workflows that move data, trigger actions,
-                  and keep everything in sync — automatically.
+                  Connect your agent to any LLM through OpenRouter, and use built-in tools to
+                  work with the apps and services you already rely on.
                 </p>
               </TextReveal>
             </div>
@@ -31,7 +31,7 @@ const Integration = () => {
 
           <RevealAnimation delay={0.4} className="flex items-center justify-center">
             <Link href="/pricing">
-              <ButtonWhite>Start free</ButtonWhite>
+              <ButtonWhite>Get started</ButtonWhite>
             </Link>
           </RevealAnimation>
         </div>

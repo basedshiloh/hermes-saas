@@ -1,58 +1,48 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/src/utils/cn";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/src/utils/cn';
+import type { PackTab } from '@/src/data/mock-dashboard';
 
-interface SidebarLink {
-  id: string;
-  title: string;
-  href: string;
-  icon: string;
-}
-
-const mainLinks: SidebarLink[] = [
-  { id: "chat", title: "Chat", href: "/dashboard", icon: "💬" },
-  { id: "settings", title: "Settings", href: "/dashboard/settings", icon: "⚙️" },
+const mainLinks = [
+  { id: 'chat', title: 'Chat', href: '/dashboard', iconClass: 'icon-message-square' },
+  { id: 'settings', title: 'Settings', href: '/dashboard/settings', iconClass: 'icon-settings' },
 ];
 
-export default function Sidebar({
-  packTabs,
-}: {
-  packTabs?: { id: string; title: string; icon?: string }[];
-}) {
+export default function Sidebar({ packTabs }: { packTabs?: PackTab[] }) {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-background-8 border-stroke-5 flex h-screen w-64 shrink-0 flex-col border-r">
+    <aside className="bg-background-5 border-stroke-5 flex h-screen w-64 shrink-0 flex-col border-r">
       <div className="border-stroke-5 flex h-16 items-center border-b px-5">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="bg-primary-600 flex size-8 items-center justify-center rounded-lg">
-            <span className="text-sm font-bold text-white">H</span>
-          </div>
-          <span className="text-lg font-semibold text-white">Hermes</span>
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="bg-(image:--color-gradient-4) flex size-9 items-center justify-center rounded-xl">
+            <span className="font-ibm-plex-mono text-sm font-bold text-white">H</span>
+          </span>
+          <span className="font-inter-tight text-heading-6 text-accent font-medium">Hermes</span>
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 overflow-y-auto px-3 py-5">
         <div className="space-y-1">
           {mainLinks.map((link) => {
             const isActive =
-              link.href === "/dashboard"
-                ? pathname === "/dashboard"
+              link.href === '/dashboard'
+                ? pathname === '/dashboard'
                 : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.id}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                  'text-tagline-2 font-inter-tight flex items-center gap-3 rounded-xl px-3.5 py-2.5 font-normal transition-colors',
                   isActive
-                    ? "bg-primary-600/20 text-primary-300"
-                    : "text-white/60 hover:bg-background-7 hover:text-white",
+                    ? 'bg-background-7 text-accent'
+                    : 'text-primary-50/60 hover:bg-background-7 hover:text-accent',
                 )}
               >
-                <span className="text-base">{link.icon}</span>
+                <span className={cn(link.iconClass, 'text-base')} />
                 <span>{link.title}</span>
               </Link>
             );
@@ -60,8 +50,8 @@ export default function Sidebar({
         </div>
 
         {packTabs && packTabs.length > 0 && (
-          <div className="mt-6">
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-white/40">
+          <div className="mt-7">
+            <p className="text-tagline-3 font-inter-tight text-primary-50/40 mb-2.5 px-3.5 font-normal uppercase tracking-wider">
               Tools
             </p>
             <div className="space-y-1">
@@ -73,10 +63,10 @@ export default function Sidebar({
                     key={tab.id}
                     href={href}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                      'text-tagline-2 font-inter-tight flex items-center gap-3 rounded-xl px-3.5 py-2.5 font-normal transition-colors',
                       isActive
-                        ? "bg-primary-600/20 text-primary-300"
-                        : "text-white/60 hover:bg-background-7 hover:text-white",
+                        ? 'bg-background-7 text-accent'
+                        : 'text-primary-50/60 hover:bg-background-7 hover:text-accent',
                     )}
                   >
                     <span>{tab.title}</span>
@@ -91,7 +81,7 @@ export default function Sidebar({
       <div className="border-stroke-5 border-t px-3 py-3">
         <Link
           href="/dashboard/setup"
-          className="text-white/40 hover:text-white/60 flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors"
+          className="text-tagline-2 font-inter-tight text-primary-50/40 hover:text-primary-50/70 flex items-center gap-2 rounded-xl px-3.5 py-2.5 font-normal transition-colors"
         >
           <span>+ Add Pack</span>
         </Link>

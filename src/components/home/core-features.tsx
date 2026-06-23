@@ -23,12 +23,12 @@ const CoreFeatures = () => {
 
               <div className="space-y-3">
                 <TextReveal delay={0.2}>
-                  <h2>Visual automation made simple</h2>
+                  <h2>Built for power, designed for simplicity</h2>
                 </TextReveal>
                 <TextReveal delay={0.3}>
                   <p className="text-background-14/60 mx-auto max-w-[400px]">
-                    Design workflows with an intuitive drag-and-drop builder and see your automation
-                    run in real time.
+                    Every managed Hermes agent comes with enterprise-grade infrastructure and
+                    features you would expect from a premium platform.
                   </p>
                 </TextReveal>
               </div>
@@ -38,19 +38,19 @@ const CoreFeatures = () => {
                   <li className="flex items-center justify-center gap-x-1">
                     <GradientCircleIcon />
                     <span className="text-tagline-2 text-secondary font-inter-tight font-normal italic">
-                      No code.
+                      BYOK access.
                     </span>
                   </li>
                   <li className="flex items-center justify-center gap-x-1">
                     <GradientCircleIcon />
                     <span className="text-tagline-2 text-secondary font-inter-tight font-normal italic">
-                      No complexity.
+                      Auto-sleep.
                     </span>
                   </li>
                   <li className="flex items-center justify-center gap-x-1">
                     <GradientCircleIcon />
                     <span className="text-tagline-2 text-secondary font-inter-tight font-normal italic">
-                      Just automation.
+                      Full isolation.
                     </span>
                   </li>
                 </ul>
@@ -81,9 +81,9 @@ const CoreFeatures = () => {
                 </figure>
 
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Auto-reminders & notifications</h3>
+                  <h3 className="text-heading-5">BYOK model access</h3>
                   <p className="text-background-14/60 line-clamp-1">
-                    Stay on track with automated reminders and real-time notifications.
+                    Bring your own key and access 200+ models via OpenRouter — use any LLM you want.
                   </p>
                 </div>
               </div>
@@ -100,9 +100,9 @@ const CoreFeatures = () => {
                 </figure>
 
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Multi-step automation logic</h3>
+                  <h3 className="text-heading-5">Auto-sleep containers</h3>
                   <p className="text-background-14/60">
-                    Build workflows that execute multiple actions in sequence.
+                    Your agent sleeps when idle and wakes instantly — you only pay when it is active.
                   </p>
                 </div>
               </div>
@@ -119,10 +119,9 @@ const CoreFeatures = () => {
                 </figure>
 
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Scale without complexity</h3>
+                  <h3 className="text-heading-5">Container isolation</h3>
                   <p className="text-background-14/60 line-clamp-1">
-                    Streamline workflows, connect tools, and grow faster—without adding extra
-                    overhead.
+                    Every agent runs in its own secure, sandboxed container with dedicated resources.
                   </p>
                 </div>
               </div>
@@ -139,9 +138,9 @@ const CoreFeatures = () => {
                 </figure>
 
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Automatically identifies your timezone</h3>
+                  <h3 className="text-heading-5">Extensible skill system</h3>
                   <p className="text-background-14/60 line-clamp-1">
-                    Detects your location instantly and sets the correct timezone.
+                    Teach your agent new abilities with reusable skills that compound over time.
                   </p>
                 </div>
               </div>

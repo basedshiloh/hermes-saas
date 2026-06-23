@@ -30,17 +30,18 @@ const AboutUs = () => {
               <RevealAnimation delay={0.2}>
                 <div className="flex flex-col items-center justify-center gap-y-8 md:gap-x-8 lg:flex-row xl:gap-x-14">
                   <div className="w-full space-y-5 lg:w-1/2">
-                    <BadgePrimary>About Us</BadgePrimary>
+                    <BadgePrimary>What is Managed Hermes</BadgePrimary>
                     <TextReveal delay={0.3}>
-                      <h2>The team behind smarter automation</h2>
+                      <h2>Zero setup, zero servers. We handle everything.</h2>
                     </TextReveal>
                   </div>
 
                   <div className="w-full space-y-8 lg:w-1/2 lg:space-y-14">
                     <TextReveal delay={0.4}>
                       <p>
-                        We created this platform to solve one simple problem — too much time is
-                        wasted on repetitive work.
+                        Hermes Agent by Nous Research is a powerful open-source AI agent — but
+                        self-hosting it requires servers, Docker, and terminal skills. We remove all
+                        of that so anyone can use it.
                       </p>
                     </TextReveal>
 
@@ -65,14 +66,14 @@ const AboutUs = () => {
                           <CounterNumberOnScroll value={90} />
                           <span>%</span>
                         </h3>
-                        <p className="text-background-14/60">Client Satisfaction</p>
+                        <p className="text-background-14/60">Uptime Guarantee</p>
                       </div>
                       <div className="space-y-1">
                         <h3 className="text-heading-5">
-                          <CounterNumberOnScroll value={10} />
-                          <span>M+</span>
+                          <CounterNumberOnScroll value={200} />
+                          <span>+</span>
                         </h3>
-                        <p className="text-background-14/60">automated workflows</p>
+                        <p className="text-background-14/60">AI models available</p>
                       </div>
                     </div>
 
@@ -86,7 +87,7 @@ const AboutUs = () => {
                           <StarIcon className="fill-primary-500 size-4" />
                         </span>
                       </h3>
-                      <p className="text-background-14/60">user rating</p>
+                      <p className="text-background-14/60">user satisfaction</p>
                     </div>
                   </div>
 

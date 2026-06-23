@@ -22,12 +22,12 @@ const Features = () => {
 
               <div className="space-y-3">
                 <TextReveal delay={0.2}>
-                  <h2>Real results teams experience</h2>
+                  <h2>One agent, 40+ built-in capabilities</h2>
                 </TextReveal>
                 <TextReveal delay={0.3}>
                   <p className="text-background-14/60 mx-auto max-w-[550px]">
-                    From faster workflows to improved collaboration, every feature is designed to
-                    deliver real, trackable results that teams can rely on every day.
+                    Your Hermes Agent can browse the web, execute code, manage files, run on a
+                    schedule, and more — all from a simple chat interface.
                   </p>
                 </TextReveal>
               </div>
@@ -39,7 +39,7 @@ const Features = () => {
                   className="mx-auto w-[80%]! md:w-fit!"
                   textClassName="text-center text-nowrap max-sm:flex-1 max-sm:pr-8!"
                 >
-                  View all features
+                  Explore all features
                 </ButtonWhite>
               </Link>
             </RevealAnimation>
@@ -49,8 +49,8 @@ const Features = () => {
             <RevealAnimation delay={0.5} className="col-span-12 md:col-span-6">
               <div className="flex h-[400px] flex-col items-start justify-between rounded-[20px] bg-white p-6 lg:h-[510px]">
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">App integrations</h3>
-                  <p>Connect all your favorite tools in one place and automate workflows.</p>
+                  <h3 className="text-heading-5">Web browsing</h3>
+                  <p>Your agent can search the web, scrape pages, and gather real-time information.</p>
                 </div>
 
                 <figure className="mx-auto">
@@ -62,8 +62,8 @@ const Features = () => {
             <RevealAnimation delay={0.6} className="col-span-12 md:col-span-6">
               <div className="flex h-[350px] flex-col items-start justify-between rounded-[20px] bg-white p-6 lg:h-[510px]">
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Smart conditions</h3>
-                  <p>Automatically control when and how workflows run.</p>
+                  <h3 className="text-heading-5">Code execution</h3>
+                  <p>Run Python, JavaScript, shell scripts, and more inside a secure sandbox.</p>
                 </div>
 
                 <figure className="w-full">
@@ -79,8 +79,8 @@ const Features = () => {
             <RevealAnimation delay={0.7} className="col-span-12 md:col-span-6">
               <div className="flex h-[350px] flex-col items-start justify-between rounded-[20px] bg-white p-6 lg:h-[510px]">
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Real-time triggers</h3>
-                  <p>Real-time triggers enable your workflows to respond instantly.</p>
+                  <h3 className="text-heading-5">File management</h3>
+                  <p>Create, read, edit, and organize files directly from your agent chat.</p>
                 </div>
 
                 <figure className="w-full">
@@ -96,8 +96,8 @@ const Features = () => {
             <RevealAnimation delay={0.8} className="col-span-12 md:col-span-6">
               <div className="flex h-[350px] flex-col items-start justify-between rounded-[20px] bg-white p-6 lg:h-[510px]">
                 <div className="space-y-1">
-                  <h3 className="text-heading-5">Multi-step automation</h3>
-                  <p>Lets you chain multiple actions into a single seamless workflow.</p>
+                  <h3 className="text-heading-5">Cron scheduling</h3>
+                  <p>Set your agent to run tasks on a schedule — daily reports, weekly audits, and more.</p>
                 </div>
 
                 <figure className="w-full">

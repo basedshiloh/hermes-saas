@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import ProvisioningProgress from "@/src/components/dashboard/provisioning/provisioning-progress";
+import ProvisioningProgress from '@/src/components/dashboard/provisioning/provisioning-progress';
 
 export default function ProvisioningPage() {
   return (

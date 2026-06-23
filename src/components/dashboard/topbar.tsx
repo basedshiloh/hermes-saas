@@ -1,59 +1,36 @@
-"use client";
+'use client';
 
-import { UserButton } from "@clerk/nextjs";
+import { cn } from '@/src/utils/cn';
+import Image from 'next/image';
+import avatarImg from '@/public/images/ns-avatar-11.jpg';
 
-// Clerk components only mount when its key is configured (inlined at build
-// time). Until then the dashboard still renders with a placeholder avatar.
-const clerkEnabled = Boolean(
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-);
+const stateConfig: Record<string, { label: string; dotClass: string }> = {
+  running: { label: 'Online', dotClass: 'bg-ns-green' },
+  sleeping: { label: 'Sleeping', dotClass: 'bg-ns-yellow' },
+  provisioning: { label: 'Deploying...', dotClass: 'bg-primary-400' },
+  pending: { label: 'Setting up...', dotClass: 'bg-primary-400' },
+  error: { label: 'Error', dotClass: 'bg-ns-red' },
+};
 
-export default function Topbar({
-  instanceState,
-}: {
-  instanceState?: string | null;
-}) {
-  const stateLabels: Record<string, { label: string; color: string }> = {
-    RUNNING: { label: "Online", color: "bg-green-500" },
-    SLEEPING: { label: "Sleeping", color: "bg-yellow-500" },
-    PROVISIONING: { label: "Deploying...", color: "bg-blue-500" },
-    PENDING: { label: "Setting up...", color: "bg-blue-500" },
-    ERROR: { label: "Error", color: "bg-red-500" },
-    DESTROYED: { label: "Offline", color: "bg-neutral-500" },
-  };
-
-  const state = instanceState
-    ? stateLabels[instanceState] || { label: instanceState, color: "bg-neutral-500" }
-    : null;
+export default function Topbar({ instanceState }: { instanceState?: string }) {
+  const state = instanceState ? stateConfig[instanceState] : null;
 
   return (
-    <header className="bg-background-8 border-stroke-5 flex h-16 shrink-0 items-center justify-between border-b px-6">
+    <header className="bg-background-5 border-stroke-5 flex h-16 shrink-0 items-center justify-between border-b px-6">
       <div className="flex items-center gap-3">
-        <h1 className="text-lg font-medium text-white">Dashboard</h1>
+        <h1 className="text-heading-6 font-inter-tight text-accent font-medium">Dashboard</h1>
         {state && (
-          <span className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-white/70">
-            <span className={cn(state.color, "inline-block size-2 rounded-full")} />
+          <span className="border-stroke-5 text-tagline-3 font-inter-tight text-primary-50/70 flex items-center gap-1.5 rounded-full border px-3 py-1 font-normal">
+            <span className={cn(state.dotClass, 'inline-block size-2 rounded-full')} />
             {state.label}
           </span>
         )}
       </div>
       <div className="flex items-center gap-4">
-        {clerkEnabled ? (
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "size-8",
-              },
-            }}
-          />
-        ) : (
-          <div className="bg-background-7 size-8 rounded-full" />
-        )}
+        <figure className="border-stroke-5 size-9 overflow-hidden rounded-full border">
+          <Image src={avatarImg} alt="User" className="size-full object-cover" />
+        </figure>
       </div>
     </header>
   );
-}
-
-function cn(...classes: (string | undefined | false)[]) {
-  return classes.filter(Boolean).join(" ");
 }

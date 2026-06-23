@@ -64,8 +64,8 @@ const Testimonial = () => {
                       ))}
                     </span>
                     <p className="text-background-14/60 text-tagline-2">
-                      Happy by <CounterNumberOnScroll value={20} />
-                      k+ clients
+                      Loved by <CounterNumberOnScroll value={20} />
+                      k+ users
                     </p>
                   </div>
                 </RevealAnimation>
@@ -77,7 +77,7 @@ const Testimonial = () => {
                   delay={0.4}
                   className="w-full rounded-xl bg-white p-4 text-center"
                 >
-                  <p className="text-tagline-3">Top Customer Ratings</p>
+                  <p className="text-tagline-3">User Satisfaction</p>
                   <div className="text-secondary font-medium">
                     <CounterNumberOnScroll value={91} duration={1.2} />%
                   </div>
@@ -89,7 +89,7 @@ const Testimonial = () => {
                     delay={0.5}
                     className="w-1/2 rounded-xl bg-white p-4 text-center"
                   >
-                    <p className="text-tagline-3">On-Time Deliveries</p>
+                    <p className="text-tagline-3">Deploy Success Rate</p>
                     <div className="text-secondary font-medium">
                       <CounterNumberOnScroll value={100} duration={1.2} />%
                     </div>
@@ -100,7 +100,7 @@ const Testimonial = () => {
                     delay={0.6}
                     className="w-1/2 rounded-xl bg-white p-4 text-center"
                   >
-                    <p className="text-tagline-3">Logistics Optimization</p>
+                    <p className="text-tagline-3">Tasks Automated</p>
                     <div className="text-secondary font-medium">
                       <CounterNumberOnScroll value={87} duration={1.2} />%
                     </div>
@@ -117,11 +117,12 @@ const Testimonial = () => {
                   <SlideImg src={slideImg1} alt="testimonial one" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Before using this platform, our team was drowning in repetitive tasks
-                      across tools and spreadsheets.
+                      &ldquo;I run an SEO agency and had zero experience with AI agents or servers.
+                      I picked the SEO Manager Pack, clicked deploy, and had my agent running in
+                      under a minute.
                       <span className="mt-5 inline-block">
-                        After setup, most daily updates now run automatically and our team finally
-                        has time for strategic work.&rdquo;
+                        It now handles keyword research and content briefs while I focus on
+                        clients.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -131,11 +132,11 @@ const Testimonial = () => {
                   <SlideImg src={slideImg2} alt="testimonial two" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Our automation SaaS turned scattered handoffs into one clear pipeline
-                      we can monitor end to end.
+                      &ldquo;As a freelance social media manager, I needed help writing captions and
+                      scheduling posts across platforms.
                       <span className="mt-5 inline-block">
-                        Approvals, status updates, and owner changes now propagate automatically, so
-                        delivery stays on track without chasing people in chat.&rdquo;
+                        My Hermes Agent drafts a full week of content in minutes. The BYOK model
+                        access means I can use whichever AI writes best for my niche.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -145,11 +146,12 @@ const Testimonial = () => {
                   <SlideImg src={slideImg3} alt="testimonial three" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;We plugged our CRM, billing, and support stack into the platform in a
-                      single afternoon.
+                      &ldquo;I tried self-hosting Hermes Agent and gave up after fighting Docker
+                      configs for a weekend. Found this platform, deployed in one click, and
+                      never looked back.
                       <span className="mt-5 inline-block">
-                        Triggers and webhooks keep customer records and subscription events in sync,
-                        so ops and finance always see the same live automation health.&rdquo;
+                        The auto-sleep feature means I only pay when I actually use it, which is
+                        way cheaper than keeping a VPS running 24/7.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -159,11 +161,11 @@ const Testimonial = () => {
                   <SlideImg src={slideImg4} alt="testimonial four" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;No-code paths let CS and success teams ship playbooks without waiting
-                      on engineering for every tweak.
+                      &ldquo;I am a grad student using the Researcher Pack. My agent summarizes
+                      papers, extracts key findings, and even writes literature review drafts.
                       <span className="mt-5 inline-block">
-                        We still drop into advanced rules when we need them, but most SaaS lifecycle
-                        automation now ship in hours, not sprints.&rdquo;
+                        It saved me easily 15 hours a week during thesis season. The chat
+                        interface is so simple — just ask and it does the work.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -173,11 +175,11 @@ const Testimonial = () => {
                   <SlideImg src={slideImg5} alt="testimonial five" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Trial-to-paid and renewal reminders used to live in spreadsheets and
-                      side threads.
+                      &ldquo;The cron scheduling changed everything for me. I set my agent to pull
+                      competitor pricing every morning and compile a report before I wake up.
                       <span className="mt-5 inline-block">
-                        The product now sequences emails, in-app nudges, and Slack alerts from one
-                        automation graph, with full run history for every account.&rdquo;
+                        As a solo e-commerce founder, having an AI analyst that runs on autopilot
+                        feels like having a full-time employee.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -187,12 +189,11 @@ const Testimonial = () => {
                   <SlideImg src={slideImg6} alt="testimonial six" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Security reviews were a blocker because we could not prove who touched
-                      which workflow or credential.
+                      &ldquo;What sold me was the container isolation. Each agent runs in its own
+                      sandbox, so I feel safe letting it execute code and manage files.
                       <span className="mt-5 inline-block">
-                        Role-based access, audit logs, and environment separation gave our buyers
-                        confidence that our SaaS automation are production-grade, not shadow
-                        IT.&rdquo;
+                        I use the Engineer Pack and it helps me prototype scripts, debug APIs,
+                        and write documentation faster than I ever could alone.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -202,12 +203,12 @@ const Testimonial = () => {
                   <SlideImg src={slideImg7} alt="testimonial seven" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Usage spikes used to mean overnight pager rotations whenever a batch
-                      job failed silently.
+                      &ldquo;Being able to switch between 200+ models with my own API key is
+                      incredible. I test different models for different tasks — Claude for
+                      writing, GPT for coding, Gemini for analysis.
                       <span className="mt-5 inline-block">
-                        Retries, dead-letter queues, and dashboards in the automation layer mean our
-                        SaaS backend keeps pace with growth without heroic manual
-                        babysitting.&rdquo;
+                        No other platform gives you this kind of flexibility without locking you
+                        into their own pricing.&rdquo;
                       </span>
                     </p>
                   </SlideContent>
@@ -217,12 +218,12 @@ const Testimonial = () => {
                   <SlideImg src={slideImg8} alt="testimonial eight" />
                   <SlideContent>
                     <p className="text-secondary">
-                      &ldquo;Executive reviews finally show one automation-backed view of MRR, churn
-                      risk, and delivery commitments.
+                      &ldquo;I manage a small marketing team and set up agents for everyone using
+                      different Packs. Our SEO lead, content writer, and social manager each
+                      have their own agent tuned for their role.
                       <span className="mt-5 inline-block">
-                        Instead of reconciling five tools the night before a board meeting, we
-                        export governed dashboards fed by the same SaaS workflows our teams run
-                        every day.&rdquo;
+                        The skill system lets them teach their agents new tricks without any
+                        coding. Productivity across the board went through the roof.&rdquo;
                       </span>
                     </p>
                   </SlideContent>

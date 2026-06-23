@@ -1,29 +1,18 @@
-interface Message {
-  id: string;
-  role: "user" | "assistant" | "system";
-  content: string;
-  timestamp: Date;
-}
+import { cn } from '@/src/utils/cn';
+import type { MockMessage } from '@/src/data/mock-dashboard';
 
-export default function MessageBubble({ message }: { message: Message }) {
-  if (message.role === "system") {
-    return (
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-4 text-sm text-blue-200">
-        {message.content}
-      </div>
-    );
-  }
-
-  const isUser = message.role === "user";
+export default function MessageBubble({ message }: { message: MockMessage }) {
+  const isUser = message.role === 'user';
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
+        className={cn(
+          'text-tagline-2 font-inter-tight max-w-[80%] whitespace-pre-wrap rounded-2xl px-5 py-3.5 font-normal',
           isUser
-            ? "bg-primary-600 text-white"
-            : "bg-background-7 text-white/90"
-        }`}
+            ? 'bg-secondary text-accent'
+            : 'bg-background-7 border-stroke-5 text-primary-50/90 border',
+        )}
       >
         {message.content}
       </div>

@@ -1,39 +1,6 @@
 {
   "version": 3,
-  "middleware": {
-    "/": {
-      "files": [
-        "server/edge/chunks/[root-of-the-server]__162fcf40._.js",
-        "server/edge/chunks/71a04_next_dist_esm_api_headers_fd195e2a.js",
-        "server/edge/chunks/71a04_next_dist_7188de43._.js",
-        "server/edge/chunks/71a04_next_dist_08ce8053._.js",
-        "server/edge/chunks/3f908_next_dist_esm_build_templates_edge-wrapper_b79016c0.js"
-      ],
-      "name": "middleware",
-      "page": "/",
-      "matchers": [
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\\\.json)?[\\/#\\?]?$",
-          "originalSource": "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(api|trpc))(.*)(\\\\.json)?[\\/#\\?]?$",
-          "originalSource": "/(api|trpc)(.*)"
-        }
-      ],
-      "wasm": [],
-      "assets": [],
-      "env": {
-        "__NEXT_BUILD_ID": "aCAQR1rSF8Emlho3lOheq",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "9OsHPhXpBQwA1s/OYC89gxT+tpZRLkkW8MLCmY7Up0c=",
-        "__NEXT_PREVIEW_MODE_ID": "32a47af62ff7d81c472ec809be2e4508",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "c3f60f814375fe576032ac6f3f31201cf0df5ae3e56c7959a5a005607b520f0a",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "8518f1943095e64e2220de52eb2118bcd4e846d075ba437bdc6606f5364b7d66"
-      }
-    }
-  },
-  "sortedMiddleware": [
-    "/"
-  ],
+  "middleware": {},
+  "sortedMiddleware": [],
   "functions": {}
 }

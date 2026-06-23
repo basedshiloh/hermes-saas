@@ -1,236 +1,69 @@
-# AI KW Generator - Nexsas Template
+# Hermes Agent SaaS — Managed AI Agent Platform
 
-A modern, production-ready Next.js 16 marketing template built around AI-powered keyword discovery and growth content. It includes a dedicated **Generate Smart Keyword** experience, blog and team sections, auth and pricing pages, and reusable UI—built with React 19, TypeScript, Tailwind CSS 4, and common animation and content tooling.
+A subscription platform that gives non-technical professionals their own **Hermes Agent** (the open-source self-improving AI agent by [Nous Research](https://hermes-agent.nousresearch.com/)) — deployed in one click, with zero server or terminal knowledge.
 
-![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)
-![React](https://img.shields.io/badge/React-19.2.3-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-blue)
-![GSAP](https://img.shields.io/badge/GSAP-3.14.2-green)
-![Lenis](https://img.shields.io/badge/Lenis-1.3.17-orange)
+Users pick a **Pack** (a pre-configured agent setup for their profession), hit deploy, and land in a chat dashboard where their agent is ready to work. No Docker, no SSH, no config files.
 
-## 📦 What's Included
+## How It Works
 
-- ✅ **Complete Source Code** - Full Next.js 16 project with App Router
-- ✅ **10+ Pages** - Home, Generate Smart Keyword, About, Blog, Team, Contact, Login, Signup, Pricing (plus dynamic blog and team detail routes)
-- ✅ **90+ Components** - Reusable React components with TypeScript
-- ✅ **Markdown Content** - Blog posts and team profiles with gray-matter
-- ✅ **Responsive Design** - Mobile-first layout
-- ✅ **SEO** - Shared metadata helpers and Open Graph defaults
+1. **Pick your role** — Choose a Pack (SEO, Social Media, Engineer, Student, or General) that pre-configures your agent with the right tools and skills.
+2. **Deploy in one click** — We provision an isolated Hermes instance for you on managed infrastructure.
+3. **Start chatting** — Your agent is live in a dashboard with a chat interface and role-specific tool tabs.
+4. **Automate everything** — Set up cron jobs, workflows, and integrations through natural language.
 
-### ⚡ **Performance & Developer Experience**
+## Packs
 
-- **Next.js 16**: App Router and modern defaults
-- **TypeScript**: Type-safe components and data
-- **Component Architecture** - Modular sections under `src/components/`
-- **Code Quality** - ESLint 9 and Prettier (with Tailwind class sorting)
-- **Maps** - Contact page map via Leaflet and react-leaflet
+| Pack | For | What it does |
+|------|-----|-------------|
+| SEO Automation | SEO managers & content marketers | Keyword research, content writing, auto-publish to WordPress |
+| Social Media | Social media managers & creators | Content ideas, post writing, scheduling |
+| Engineer & Analyst | Engineers & data analysts | Code execution, data crunching, automations |
+| Student & Researcher | Students & academics | Paper summaries, study notes, citation tracking |
+| General Assistant | Power users | Open-ended chat agent for anything |
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: Next.js 16 with App Router
-- **Language**: TypeScript 5.x
-- **UI**: React 19
-- **Styling**: Tailwind CSS 4
-- **Animations**: GSAP 3.14, Lenis 1.3.17
-- **Icons**: Custom icon font system
-- **Carousels**: Swiper
-- **Marquee**: react-fast-marquee
-- **Maps**: Leaflet, react-leaflet
-- **Markdown**: react-markdown, gray-matter, rehype-slug
+- **Frontend:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4
+- **Animations:** GSAP, Lenis smooth scroll
+- **Auth (Phase 0B):** Clerk
+- **Billing (Phase 0B):** Stripe
+- **Database (Phase 0B):** Neon (serverless Postgres) + Prisma
+- **Agent runtime (Phase 1):** Docker containers on Hetzner, managed via dockerode
+- **Chat proxy (Phase 2):** WebSocket on Hetzner worker service
 
-## 📋 Prerequisites
-
-- **Node.js** 20.0.0 or higher
-- **npm**, **yarn**, **pnpm**, or **bun**
-- **Git** for version control
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
+## Getting Started
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
-
-### 2. Start Development Server
-
-```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-The application will be available at `http://localhost:3000`
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📁 Project Structure
+No environment variables are needed for Phase 0A (demo UI). The app deploys to Vercel as-is.
+
+## Build Phases
+
+- **Phase 0A** (current) — Complete clickable UI with mock data. Demo-ready.
+- **Phase 0B** — Wire up Clerk auth, Stripe billing, Neon database.
+- **Phase 1** — Hetzner worker service + Docker provisioning.
+- **Phase 2** — WebSocket chat proxy to real Hermes agents.
+- **Phase 3–5** — BYOK injection, pack system, idle-sleep, billing lifecycle.
+
+## Project Structure
 
 ```
-ai-kw-generator-ns-next/
-├── public/                     # Static assets
-│   └── images/                 # Images and icons
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── about/              # About page
-│   │   ├── blog/               # Blog listing and [slug] posts
-│   │   ├── contact/            # Contact page (incl. map)
-│   │   ├── generate-smart-keyword/  # Keyword generator marketing page
-│   │   ├── login/              # Login page
-│   │   ├── pricing/            # Pricing page
-│   │   ├── signup/             # Signup page
-│   │   ├── team/               # Team listing and [slug] profiles
-│   │   ├── globals.css
-│   │   ├── layout.tsx
-│   │   ├── not-found.tsx
-│   │   └── page.tsx            # Homepage
-│   ├── components/             # Page and shared UI (~90+ TSX files)
-│   │   ├── about/
-│   │   ├── animation/
-│   │   ├── auth/
-│   │   ├── blog/
-│   │   ├── blog-details/
-│   │   ├── contact/
-│   │   ├── generate-smart-keyword/
-│   │   ├── home/
-│   │   ├── not-found/
-│   │   ├── pricing/
-│   │   ├── shared/             # Layout, footer, navbar, shared UI
-│   │   └── team/
-│   ├── context/
-│   │   └── MobileMenuContext.tsx
-│   ├── data/                   # Static data and Markdown
-│   │   ├── blog/               # Blog posts (.md)
-│   │   ├── team/               # Team profiles (.md)
-│   │   ├── mobile-meu.ts       # Navigation / mobile menu data
-│   │   ├── footer.ts
-│   │   ├── pricing.ts
-│   │   └── team.ts
-│   ├── hooks/                  # Custom hooks
-│   ├── interface/              # Shared TypeScript types
-│   ├── styles/                 # CSS variables, typography, icons
-│   └── utils/                  # cn, fonts, Markdown loaders, metadata, TOC
-├── eslint.config.mjs
-├── next.config.ts
-├── postcss.config.mjs
-├── tsconfig.json
-├── package.json
-└── README.md
+src/
+├── app/
+│   ├── (marketing)/     # Landing, pricing, about, blog, services, login, signup
+│   ├── (dashboard)/     # Dashboard shell, chat, setup, provisioning, settings
+│   └── globals.css
+├── components/
+│   ├── dashboard/       # Sidebar, topbar, chat, provisioning, setup
+│   ├── home/            # Hero, features, process, pricing, FAQ, etc.
+│   └── shared/          # Buttons, cards, badges, navbar, footer
+├── data/
+│   └── mock-dashboard.ts  # Mock data for Phase 0A demo
+├── packs/               # Pack YAML configs (SEO, social, engineer, student, general)
+└── styles/              # Design tokens, typography, icon fonts
 ```
-
-## 🔧 Development
-
-### Available Scripts
-
-```bash
-npm run dev          # Development server
-npm run build        # Production build
-npm run start        # Production server
-npm run lint         # ESLint
-```
-
-### Code Quality Tools
-
-- **ESLint 9** with eslint-config-next
-- **Prettier 3** with prettier-plugin-tailwindcss
-
-## 🎨 Customization
-
-### Theme
-
-1. **Colors** - `src/styles/variable.css`
-2. **Typography** - `src/utils/font.ts`
-3. **Components** - `src/components/`
-4. **Tailwind** - PostCSS / Tailwind v4 setup in project config
-
-### Content
-
-| Content Type | Location                 | Description        |
-| ------------ | ------------------------ | ------------------ |
-| Blog posts   | `src/data/blog/`         | Markdown + front matter |
-| Team         | `src/data/team/`         | Markdown profiles  |
-| Team index   | `src/data/team.ts`       | Listing metadata   |
-| Pricing      | `src/data/pricing.ts`    | Plans and copy       |
-| Navigation   | `src/data/mobile-meu.ts` | Nav / mobile menu  |
-| Footer       | `src/data/footer.ts`     | Footer links       |
-
-### Adding a New Page
-
-1. Add a folder under `src/app/<route>/` with `page.tsx`
-2. Add sections under `src/components/<feature>/` as needed
-3. Extend `src/data/mobile-meu.ts` if the route should appear in navigation
-
-Example:
-
-```tsx
-// src/app/new-page/page.tsx
-import NewPageComponent from '@/src/components/new-page/NewPageComponent';
-import { generateMetadata as buildMetadata } from '@/src/utils/generateMetaData';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  ...buildMetadata(
-    'New Page - AI KW Generator',
-    'Short description for SEO and social previews.'
-  ),
-};
-
-const NewPage = () => {
-  return (
-    <main>
-      <NewPageComponent />
-    </main>
-  );
-};
-
-export default NewPage;
-```
-
-## 🏗️ Building for Production
-
-```bash
-npm run build
-npm run start
-```
-
-Build output benefits from Next.js image handling, route-based splitting, and static generation where configured.
-
-## 🚀 Deployment
-
-### Vercel (recommended)
-
-```bash
-npm i -g vercel
-vercel
-```
-
-The template also deploys to Netlify, Railway, DigitalOcean, AWS Amplify, or any Node host that supports Next.js.
-
-Typical steps: run `npm run build` locally, set environment variables if you add any, then connect the repo to your host.
-
-## 🔍 Browser Support
-
-- Chrome, Firefox, Safari, Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 📧 Support
-
-For support and questions:
-
-- **Email**: [hello@pixel71.com](mailto:hello@pixel71.com)
-- **Response Time**: Within 24 hours on business days
-
----
-
-**Made with ❤️ by [Pixel71](mailto:hello@pixel71.com)**
-
-_Happy coding!_

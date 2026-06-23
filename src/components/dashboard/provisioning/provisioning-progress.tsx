@@ -1,64 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-
-interface Stage {
-  id: string;
-  label: string;
-  description: string;
-}
-
-const STAGES: Stage[] = [
-  {
-    id: "QUEUED",
-    label: "Queued",
-    description: "Your agent is in the deployment queue...",
-  },
-  {
-    id: "ALLOCATING_HOST",
-    label: "Allocating resources",
-    description: "Selecting the best server for your agent...",
-  },
-  {
-    id: "PULLING_IMAGE",
-    label: "Downloading agent",
-    description: "Pulling the latest Hermes agent image...",
-  },
-  {
-    id: "STARTING_CONTAINER",
-    label: "Starting environment",
-    description: "Spinning up your private agent environment...",
-  },
-  {
-    id: "INSTALLING_HERMES",
-    label: "Installing Hermes",
-    description: "Setting up the Hermes agent in your environment...",
-  },
-  {
-    id: "CONFIGURING_GATEWAY",
-    label: "Configuring gateway",
-    description: "Setting up the communication channel to your agent...",
-  },
-  {
-    id: "HEALTH_CHECK",
-    label: "Health check",
-    description: "Verifying everything is working correctly...",
-  },
-  {
-    id: "READY",
-    label: "Ready!",
-    description: "Your Hermes agent is live and ready to chat.",
-  },
-];
+import { cn } from '@/src/utils/cn';
+import { PROVISIONING_STAGES } from '@/src/data/mock-dashboard';
+import { useEffect, useState } from 'react';
 
 export default function ProvisioningProgress() {
-  const [currentStageIndex, setCurrentStageIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Phase 0: simulate progress for UI testing
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentStageIndex((prev) => {
-        if (prev >= STAGES.length - 1) {
+      setCurrentIndex((prev) => {
+        if (prev >= PROVISIONING_STAGES.length - 1) {
           clearInterval(interval);
           return prev;
         }
@@ -68,76 +20,62 @@ export default function ProvisioningProgress() {
     return () => clearInterval(interval);
   }, []);
 
-  const progress = ((currentStageIndex + 1) / STAGES.length) * 100;
+  const progress = ((currentIndex + 1) / PROVISIONING_STAGES.length) * 100;
 
   return (
-    <div className="w-full max-w-lg space-y-8">
-      <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-semibold text-white">
-          Deploying your agent
-        </h2>
-        <p className="text-sm text-white/50">
-          This usually takes about 2 minutes. You can leave this page and come
-          back.
+    <div className="w-full max-w-lg space-y-10">
+      <div className="space-y-3 text-center">
+        <h2 className="text-heading-4 font-inter-tight text-accent">Deploying your agent</h2>
+        <p className="text-tagline-2 font-inter-tight text-primary-50/50 font-normal">
+          This usually takes about 2 minutes. You can leave this page and come back.
         </p>
       </div>
 
       <div className="space-y-3">
         <div className="bg-background-7 h-2 overflow-hidden rounded-full">
           <div
-            className="bg-primary-600 h-full rounded-full transition-all duration-700 ease-out"
+            className="bg-(image:--color-gradient-4) h-full rounded-full transition-all duration-700 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="text-center text-xs text-white/40">
+        <p className="text-tagline-3 font-inter-tight text-primary-50/40 text-center font-normal">
           {Math.round(progress)}% complete
         </p>
       </div>
 
       <div className="space-y-2">
-        {STAGES.map((stage, i) => {
-          const isComplete = i < currentStageIndex;
-          const isCurrent = i === currentStageIndex;
-          const isPending = i > currentStageIndex;
+        {PROVISIONING_STAGES.map((stage, i) => {
+          const isComplete = i < currentIndex;
+          const isCurrent = i === currentIndex;
+          const isPending = i > currentIndex;
 
           return (
             <div
               key={stage.id}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-300 ${
+              className={cn(
+                'flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300',
                 isCurrent
-                  ? "bg-primary-600/10 border-primary-600/30 border"
+                  ? 'bg-primary-600/10 border-primary-600/30 border'
                   : isComplete
-                    ? "opacity-60"
-                    : "opacity-30"
-              }`}
+                    ? 'opacity-60'
+                    : 'opacity-30',
+              )}
             >
               <div className="flex size-6 shrink-0 items-center justify-center">
                 {isComplete ? (
-                  <svg
-                    className="text-green-400"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
+                  <svg className="text-ns-green" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6 9 17l-5-5" /></svg>
                 ) : isCurrent ? (
-                  <div className="bg-primary-500 size-3 animate-pulse rounded-full" />
+                  <span className="bg-primary-400 size-3 animate-pulse rounded-full" />
                 ) : (
-                  <div className="bg-background-9 size-3 rounded-full" />
+                  <span className="bg-background-9 size-3 rounded-full" />
                 )}
               </div>
               <div>
-                <p
-                  className={`text-sm font-medium ${isPending ? "text-white/40" : "text-white"}`}
-                >
+                <p className={cn('text-tagline-2 font-inter-tight font-normal', isPending ? 'text-primary-50/40' : 'text-accent')}>
                   {stage.label}
                 </p>
                 {isCurrent && (
-                  <p className="text-xs text-white/50">{stage.description}</p>
+                  <p className="text-tagline-3 font-inter-tight text-primary-50/50 font-normal">{stage.description}</p>
                 )}
               </div>
             </div>
