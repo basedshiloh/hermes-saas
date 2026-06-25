@@ -1,34 +1,31 @@
-import { auth } from "@clerk/nextjs/server";
 import { db } from "@/src/lib/db";
+import { getOrCreateUser } from "@/src/lib/user";
 import { destroyContainer } from "@/src/lib/worker-client";
 import { NextRequest, NextResponse } from "next/server";
 
-async function getOwnedAgent(clerkId: string, agentId: string) {
-  const user = await db.user.findUnique({ where: { clerkId } });
-  if (!user) return null;
-  const agent = await db.agentInstance.findFirst({
-    where: { id: agentId, userId: user.id },
+async function getOwnedAgent(userDbId: string, agentId: string) {
+  return db.agentInstance.findFirst({
+    where: { id: agentId, userId: userDbId },
   });
-  return agent;
 }
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getOrCreateUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const agent = await getOwnedAgent(userId, id);
+  const agent = await getOwnedAgent(user.id, id);
   if (!agent) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({ agent });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getOrCreateUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const agent = await getOwnedAgent(userId, id);
+  const agent = await getOwnedAgent(user.id, id);
   if (!agent) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   if (agent.containerId) {

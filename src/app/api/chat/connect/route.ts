@@ -1,5 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
 import { db } from "@/src/lib/db";
+import { getOrCreateUser } from "@/src/lib/user";
 import { createHmac } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,14 +7,11 @@ import { NextRequest, NextResponse } from "next/server";
 // signed-in user owns the agent, then sign the agentId with the worker's shared
 // secret. The secret never reaches the browser.
 export async function GET(req: NextRequest) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getOrCreateUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const agentId = req.nextUrl.searchParams.get("agentId");
   if (!agentId) return NextResponse.json({ error: "agentId required" }, { status: 400 });
-
-  const user = await db.user.findUnique({ where: { clerkId: userId } });
-  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
   const agent = await db.agentInstance.findFirst({
     where: { id: agentId, userId: user.id },

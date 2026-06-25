@@ -1,33 +1,32 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/src/lib/db";
 import { decrypt } from "@/src/lib/encryption";
+import { getOrCreateUser } from "@/src/lib/user";
 import { enqueueProvision } from "@/src/lib/worker-client";
 import { PACKS } from "@/src/data/mock-dashboard";
 import { NextRequest, NextResponse } from "next/server";
 
 // List the signed-in user's agents
 export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getOrCreateUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const user = await db.user.findUnique({
-    where: { clerkId: userId },
-    include: { agentInstances: { orderBy: { createdAt: "desc" } } },
+  const agents = await db.agentInstance.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
   });
 
-  return NextResponse.json({ agents: user?.agentInstances ?? [] });
+  return NextResponse.json({ agents });
 }
 
 // Create + deploy a new agent
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await getOrCreateUser();
+  if (!user || !userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const user = await db.user.findUnique({
-    where: { clerkId: userId },
-    include: { subscription: true, modelKeys: true },
-  });
-  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const subscription = await db.subscription.findUnique({ where: { userId: user.id } });
+  const modelKeys = await db.modelKey.findMany({ where: { userId: user.id } });
 
   const { name, packId } = await req.json();
   const pack = PACKS.find((p) => p.id === packId) ?? PACKS.find((p) => p.id === "general")!;
@@ -43,9 +42,9 @@ export async function POST(req: NextRequest) {
 
   // Decrypt the user's BYOK key (if saved) to inject into the agent
   let modelKey: string | undefined;
-  if (user.modelKeys.length > 0) {
+  if (modelKeys.length > 0) {
     try {
-      modelKey = decrypt(user.modelKeys[0].encryptedKey);
+      modelKey = decrypt(modelKeys[0].encryptedKey);
     } catch {
       modelKey = undefined;
     }
@@ -55,7 +54,7 @@ export async function POST(req: NextRequest) {
     await enqueueProvision({
       agentId: agent.id,
       userId,
-      plan: user.subscription?.plan ?? "STARTER",
+      plan: subscription?.plan ?? "STARTER",
       modelKey,
       callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/agents/callback`,
     });
