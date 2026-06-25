@@ -2,19 +2,47 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/src/lib/db";
 import { decrypt } from "@/src/lib/encryption";
 import { getOrCreateUser } from "@/src/lib/user";
-import { enqueueProvision } from "@/src/lib/worker-client";
+import { enqueueProvision, getAgentStatus } from "@/src/lib/worker-client";
 import { PACKS } from "@/src/data/mock-dashboard";
 import { NextRequest, NextResponse } from "next/server";
 
-// List the signed-in user's agents
+// List the signed-in user's agents, reconciling any still-provisioning agents
+// against the worker's real container state (self-healing, no callback needed).
 export async function GET() {
   const user = await getOrCreateUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const agents = await db.agentInstance.findMany({
+  let agents = await db.agentInstance.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
+
+  const pending = agents.filter(
+    (a) => a.state === "PROVISIONING" || a.state === "PENDING",
+  );
+
+  if (pending.length > 0) {
+    await Promise.allSettled(
+      pending.map(async (a) => {
+        const live = await getAgentStatus(a.id);
+        if (live.exists && live.status === "running") {
+          await db.agentInstance.update({
+            where: { id: a.id },
+            data: {
+              state: "RUNNING",
+              containerId: live.containerId,
+              internalHost: live.host,
+              port: live.port,
+            },
+          });
+        }
+      }),
+    );
+    agents = await db.agentInstance.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+    });
+  }
 
   return NextResponse.json({ agents });
 }

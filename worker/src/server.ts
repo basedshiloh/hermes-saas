@@ -82,6 +82,24 @@ app.get("/worker/status/:containerId", async (request) => {
   return { containerId, status };
 });
 
+// Report an agent's live container status by agentId (used by the dashboard to
+// reconcile state without relying on the provisioning callback).
+app.get("/worker/agent/:agentId", async (request) => {
+  const { agentId } = request.params as { agentId: string };
+  const info = await provisioner.recover(agentId);
+  if (!info) return { exists: false };
+  const status = await provisioner.status(info.containerId);
+  // Keep the chat registry warm so the first message connects instantly
+  registerContainer(agentId, info);
+  return {
+    exists: true,
+    status,
+    containerId: info.containerId,
+    host: info.host,
+    port: info.port,
+  };
+});
+
 app.get("/worker/progress/:jobId", { websocket: true }, (socket, request) => {
   const jobId = (request.params as { jobId: string }).jobId;
 

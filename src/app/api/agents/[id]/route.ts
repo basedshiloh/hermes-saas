@@ -1,6 +1,6 @@
 import { db } from "@/src/lib/db";
 import { getOrCreateUser } from "@/src/lib/user";
-import { destroyContainer } from "@/src/lib/worker-client";
+import { destroyContainer, getAgentStatus } from "@/src/lib/worker-client";
 import { NextRequest, NextResponse } from "next/server";
 
 async function getOwnedAgent(userDbId: string, agentId: string) {
@@ -14,8 +14,28 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const agent = await getOwnedAgent(user.id, id);
+  let agent = await getOwnedAgent(user.id, id);
   if (!agent) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Self-heal: if still provisioning, ask the worker for the real state
+  if (agent.state === "PROVISIONING" || agent.state === "PENDING") {
+    try {
+      const live = await getAgentStatus(agent.id);
+      if (live.exists && live.status === "running") {
+        agent = await db.agentInstance.update({
+          where: { id: agent.id },
+          data: {
+            state: "RUNNING",
+            containerId: live.containerId,
+            internalHost: live.host,
+            port: live.port,
+          },
+        });
+      }
+    } catch {
+      /* worker unreachable — leave as-is */
+    }
+  }
 
   return NextResponse.json({ agent });
 }

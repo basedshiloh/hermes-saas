@@ -29,6 +29,16 @@ export async function enqueueProvision(args: {
   });
 }
 
+export async function getAgentStatus(agentId: string): Promise<{
+  exists: boolean;
+  status?: string;
+  containerId?: string;
+  host?: string;
+  port?: number;
+}> {
+  return workerFetch(`/worker/agent/${agentId}`, { method: "GET" });
+}
+
 export async function startContainer(containerId: string) {
   return workerFetch("/worker/start", {
     method: "POST",
