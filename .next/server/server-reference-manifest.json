@@ -62,12 +62,6 @@
           "exportedName": "invalidateCacheAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
         },
-        "app/(marketing)/login/page": {
-          "moduleId": 89553,
-          "async": false,
-          "exportedName": "invalidateCacheAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
-        },
         "app/(marketing)/page": {
           "moduleId": 86864,
           "async": false,
@@ -88,12 +82,6 @@
         },
         "app/(marketing)/services/page": {
           "moduleId": 83140,
-          "async": false,
-          "exportedName": "invalidateCacheAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
-        },
-        "app/(marketing)/signup/page": {
-          "moduleId": 76031,
           "async": false,
           "exportedName": "invalidateCacheAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
@@ -140,12 +128,10 @@
         "app/(marketing)/blog/page": "action-browser",
         "app/(marketing)/contact/page": "action-browser",
         "app/(marketing)/features/page": "action-browser",
-        "app/(marketing)/login/page": "action-browser",
         "app/(marketing)/page": "action-browser",
         "app/(marketing)/pricing/page": "action-browser",
         "app/(marketing)/services/[slug]/page": "action-browser",
         "app/(marketing)/services/page": "action-browser",
-        "app/(marketing)/signup/page": "action-browser",
         "app/(marketing)/team/[slug]/page": "action-browser",
         "app/(marketing)/team/page": "action-browser",
         "app/_not-found/page": "action-browser",
@@ -217,12 +203,6 @@
           "exportedName": "createOrReadKeylessAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
         },
-        "app/(marketing)/login/page": {
-          "moduleId": 89553,
-          "async": false,
-          "exportedName": "createOrReadKeylessAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
         "app/(marketing)/page": {
           "moduleId": 86864,
           "async": false,
@@ -243,12 +223,6 @@
         },
         "app/(marketing)/services/page": {
           "moduleId": 83140,
-          "async": false,
-          "exportedName": "createOrReadKeylessAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
-        "app/(marketing)/signup/page": {
-          "moduleId": 76031,
           "async": false,
           "exportedName": "createOrReadKeylessAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
@@ -295,12 +269,10 @@
         "app/(marketing)/blog/page": "rsc",
         "app/(marketing)/contact/page": "rsc",
         "app/(marketing)/features/page": "rsc",
-        "app/(marketing)/login/page": "rsc",
         "app/(marketing)/page": "rsc",
         "app/(marketing)/pricing/page": "rsc",
         "app/(marketing)/services/[slug]/page": "rsc",
         "app/(marketing)/services/page": "rsc",
-        "app/(marketing)/signup/page": "rsc",
         "app/(marketing)/team/[slug]/page": "rsc",
         "app/(marketing)/team/page": "rsc",
         "app/_not-found/page": "rsc",
@@ -372,12 +344,6 @@
           "exportedName": "deleteKeylessAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
         },
-        "app/(marketing)/login/page": {
-          "moduleId": 89553,
-          "async": false,
-          "exportedName": "deleteKeylessAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
         "app/(marketing)/page": {
           "moduleId": 86864,
           "async": false,
@@ -398,12 +364,6 @@
         },
         "app/(marketing)/services/page": {
           "moduleId": 83140,
-          "async": false,
-          "exportedName": "deleteKeylessAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
-        "app/(marketing)/signup/page": {
-          "moduleId": 76031,
           "async": false,
           "exportedName": "deleteKeylessAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
@@ -450,12 +410,10 @@
         "app/(marketing)/blog/page": "action-browser",
         "app/(marketing)/contact/page": "action-browser",
         "app/(marketing)/features/page": "action-browser",
-        "app/(marketing)/login/page": "action-browser",
         "app/(marketing)/page": "action-browser",
         "app/(marketing)/pricing/page": "action-browser",
         "app/(marketing)/services/[slug]/page": "action-browser",
         "app/(marketing)/services/page": "action-browser",
-        "app/(marketing)/signup/page": "action-browser",
         "app/(marketing)/team/[slug]/page": "action-browser",
         "app/(marketing)/team/page": "action-browser",
         "app/_not-found/page": "action-browser",
@@ -527,12 +485,6 @@
           "exportedName": "syncKeylessConfigAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
         },
-        "app/(marketing)/login/page": {
-          "moduleId": 89553,
-          "async": false,
-          "exportedName": "syncKeylessConfigAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
         "app/(marketing)/page": {
           "moduleId": 86864,
           "async": false,
@@ -553,12 +505,6 @@
         },
         "app/(marketing)/services/page": {
           "moduleId": 83140,
-          "async": false,
-          "exportedName": "syncKeylessConfigAction",
-          "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
-        },
-        "app/(marketing)/signup/page": {
-          "moduleId": 76031,
           "async": false,
           "exportedName": "syncKeylessConfigAction",
           "filename": "hermes saas/hermes-saas/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
@@ -605,12 +551,10 @@
         "app/(marketing)/blog/page": "action-browser",
         "app/(marketing)/contact/page": "action-browser",
         "app/(marketing)/features/page": "action-browser",
-        "app/(marketing)/login/page": "action-browser",
         "app/(marketing)/page": "action-browser",
         "app/(marketing)/pricing/page": "action-browser",
         "app/(marketing)/services/[slug]/page": "action-browser",
         "app/(marketing)/services/page": "action-browser",
-        "app/(marketing)/signup/page": "action-browser",
         "app/(marketing)/team/[slug]/page": "action-browser",
         "app/(marketing)/team/page": "action-browser",
         "app/_not-found/page": "action-browser",

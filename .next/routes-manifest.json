@@ -108,6 +108,24 @@
       "namedRegex": "^/api/instance(?:/)?$"
     },
     {
+      "page": "/api/instance/callback",
+      "regex": "^/api/instance/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/instance/callback(?:/)?$"
+    },
+    {
+      "page": "/api/instance/start",
+      "regex": "^/api/instance/start(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/instance/start(?:/)?$"
+    },
+    {
+      "page": "/api/instance/stop",
+      "regex": "^/api/instance/stop(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/instance/stop(?:/)?$"
+    },
+    {
       "page": "/api/keys",
       "regex": "^/api/keys(?:/)?$",
       "routeKeys": {},
@@ -180,12 +198,6 @@
       "namedRegex": "^/features(?:/)?$"
     },
     {
-      "page": "/login",
-      "regex": "^/login(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/login(?:/)?$"
-    },
-    {
       "page": "/pricing",
       "regex": "^/pricing(?:/)?$",
       "routeKeys": {},
@@ -196,12 +208,6 @@
       "regex": "^/services(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/services(?:/)?$"
-    },
-    {
-      "page": "/signup",
-      "regex": "^/signup(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/signup(?:/)?$"
     },
     {
       "page": "/team",
