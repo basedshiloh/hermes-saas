@@ -16,6 +16,8 @@ WORKDIR /home/hermes
 
 RUN curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash || true
 
-EXPOSE 3100
+# Hermes API server port (controlled via API_SERVER_* env vars at runtime)
+EXPOSE 8642
 
-CMD ["bash", "-c", "hermes --gateway --port ${HERMES_PORT:-3100}"]
+# Start the gateway; the OpenAI-compatible API server runs when API_SERVER_ENABLED=true
+CMD ["bash", "-lc", "hermes -p default gateway"]

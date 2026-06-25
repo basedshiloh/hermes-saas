@@ -5,12 +5,31 @@ import { MOCK_CONVERSATION, type MockMessage } from '@/src/data/mock-dashboard';
 import ChatInput from './chat-input';
 import MessageBubble from './message-bubble';
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || '';
-
 interface ChatMessage {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
+}
+
+function runMockDemo(
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
+  setStatus: React.Dispatch<React.SetStateAction<string | null>>,
+): () => void {
+  let idx = 0;
+  const interval = setInterval(() => {
+    if (idx < MOCK_CONVERSATION.length) {
+      const msg = MOCK_CONVERSATION[idx];
+      setMessages((prev) => [...prev, { id: msg.id, role: msg.role, content: msg.content }]);
+      if (msg.role === 'assistant') {
+        setStatus('Hermes is thinking...');
+        setTimeout(() => setStatus(null), 800);
+      }
+      idx++;
+    } else {
+      clearInterval(interval);
+    }
+  }, 1200);
+  return () => clearInterval(interval);
 }
 
 export default function ChatPanel() {
@@ -30,101 +49,79 @@ export default function ChatPanel() {
   }, [messages, status, scrollToBottom]);
 
   useEffect(() => {
-    // Browsers block insecure ws:// connections from an https:// page (mixed
-    // content), and new WebSocket() throws synchronously. Fall back to the mock
-    // demo unless we have a usable URL for the current page protocol.
-    const pageIsHttps =
-      typeof window !== 'undefined' && window.location.protocol === 'https:';
-    const wsUsable =
-      WS_URL && !(pageIsHttps && WS_URL.startsWith('ws://'));
+    let ws: WebSocket | null = null;
+    let cleanupMock: (() => void) | null = null;
+    let cancelled = false;
 
-    if (!wsUsable) {
-      // No usable WebSocket URL — show mock conversation
-      let idx = 0;
-      const interval = setInterval(() => {
-        if (idx < MOCK_CONVERSATION.length) {
-          const msg = MOCK_CONVERSATION[idx];
-          setMessages((prev) => [...prev, { id: msg.id, role: msg.role, content: msg.content }]);
-          if (msg.role === 'assistant') {
-            setStatus('Hermes is thinking...');
-            setTimeout(() => setStatus(null), 800);
+    async function connect() {
+      let wsUrl: string | null = null;
+      try {
+        const res = await fetch('/api/chat/connect');
+        const data = await res.json();
+        wsUrl = data.wsUrl;
+      } catch {
+        wsUrl = null;
+      }
+
+      if (cancelled) return;
+
+      // No agent configured yet — show the demo conversation
+      if (!wsUrl) {
+        cleanupMock = runMockDemo(setMessages, setStatus);
+        return;
+      }
+
+      try {
+        ws = new WebSocket(wsUrl);
+      } catch {
+        cleanupMock = runMockDemo(setMessages, setStatus);
+        return;
+      }
+      wsRef.current = ws;
+
+      ws.onopen = () => setConnected(true);
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'status') {
+          if (data.status === 'thinking' || data.status === 'connecting') {
+            setStatus(data.message);
+          } else {
+            setStatus(null);
+            setMessages((prev) => [
+              ...prev,
+              { id: crypto.randomUUID(), role: 'system', content: data.message },
+            ]);
           }
-          idx++;
-        } else {
-          clearInterval(interval);
         }
-      }, 1200);
-      return () => clearInterval(interval);
-    }
 
-    // Real WebSocket connection
-    let ws: WebSocket;
-    try {
-      ws = new WebSocket(WS_URL);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: 'system',
-          content: 'Could not connect to your agent. Showing demo mode.',
-        },
-      ]);
-      return;
-    }
-    wsRef.current = ws;
-
-    ws.onopen = () => {
-      setConnected(true);
-    };
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === 'status') {
-        if (data.status === 'thinking') {
-          setStatus(data.message);
-        } else if (data.status === 'connected') {
+        if (data.type === 'message' && data.role === 'assistant') {
           setStatus(null);
           setMessages((prev) => [
             ...prev,
-            { id: crypto.randomUUID(), role: 'system', content: data.message },
+            { id: crypto.randomUUID(), role: 'assistant', content: data.content },
           ]);
-        } else if (data.status === 'connecting') {
-          setStatus(data.message);
-        } else if (data.status === 'error') {
+        }
+
+        if (data.type === 'error') {
           setStatus(null);
           setMessages((prev) => [
             ...prev,
             { id: crypto.randomUUID(), role: 'system', content: data.message },
           ]);
         }
-      }
+      };
 
-      if (data.type === 'message' && data.role === 'assistant') {
-        setStatus(null);
-        setMessages((prev) => [
-          ...prev,
-          { id: crypto.randomUUID(), role: 'assistant', content: data.content },
-        ]);
-      }
+      ws.onclose = () => setConnected(false);
+    }
 
-      if (data.type === 'error') {
-        setStatus(null);
-        setMessages((prev) => [
-          ...prev,
-          { id: crypto.randomUUID(), role: 'system', content: data.message },
-        ]);
-      }
-    };
-
-    ws.onclose = () => {
-      setConnected(false);
-      setStatus('Disconnected from agent. Reconnecting...');
-    };
+    connect();
 
     return () => {
-      ws.close();
+      cancelled = true;
+      if (ws) ws.close();
+      if (cleanupMock) cleanupMock();
     };
   }, []);
 

@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import websocket from "@fastify/websocket";
 import { Queue, Worker } from "bullmq";
+import { createHmac, timingSafeEqual } from "crypto";
 import { processProvisionJob, type ProvisionJobData } from "./jobs/provision.js";
 import { DockerProvisioner } from "./provisioners/docker.js";
 import { handleChatConnection, registerContainer } from "./chat-proxy.js";
@@ -10,6 +11,16 @@ import { handleChatConnection, registerContainer } from "./chat-proxy.js";
 const PORT = parseInt(process.env.PORT || "4000");
 const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+
+// The browser chat WS proves identity with an HMAC of the userId signed with
+// the internal token. The token itself is never exposed to the client.
+function verifyChatSig(userId: string, sig: string): boolean {
+  if (!userId || !sig) return false;
+  const expected = createHmac("sha256", INTERNAL_TOKEN).update(userId).digest("hex");
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 const redisOpts = { connection: { url: REDIS_URL } };
 const provisioner = new DockerProvisioner();
@@ -42,8 +53,8 @@ app.get("/worker/health", async () => {
 });
 
 app.post("/worker/provision", async (request) => {
-  const { userId, plan, callbackUrl } = request.body as ProvisionJobData;
-  const job = await provisionQueue.add("provision", { userId, plan, callbackUrl });
+  const { userId, plan, modelKey, callbackUrl } = request.body as ProvisionJobData;
+  const job = await provisionQueue.add("provision", { userId, plan, modelKey, callbackUrl });
   return { jobId: job.id, status: "queued" };
 });
 
@@ -101,29 +112,29 @@ app.get("/worker/progress/:jobId", { websocket: true }, (socket, request) => {
   socket.on("close", () => clearInterval(interval));
 });
 
-// Register a container for a user (called after provisioning)
+// Register a container for a user (manual / recovery path)
 app.post("/worker/register", async (request) => {
-  const { userId, host, port, containerId } = request.body as {
-    userId: string; host: string; port: number; containerId: string;
+  const { userId, host, port, containerId, apiKey } = request.body as {
+    userId: string; host: string; port: number; containerId: string; apiKey: string;
   };
-  registerContainer(userId, { host, port, containerId });
+  registerContainer(userId, { host, port, containerId, apiKey });
   return { status: "registered" };
 });
 
-// Chat WebSocket — authenticates via query param token + userId
+// Chat WebSocket — authenticates via HMAC signature of the userId
 app.get("/worker/chat", { websocket: true }, (socket, request) => {
   const url = new URL(request.url, `http://${request.headers.host}`);
-  const token = url.searchParams.get("token");
-  const userId = url.searchParams.get("userId");
+  const sig = url.searchParams.get("sig") || "";
+  const userId = url.searchParams.get("userId") || "";
 
-  if (INTERNAL_TOKEN && token !== INTERNAL_TOKEN) {
-    socket.send(JSON.stringify({ type: "error", message: "Unauthorized" }));
+  if (!userId) {
+    socket.send(JSON.stringify({ type: "error", message: "userId required" }));
     socket.close();
     return;
   }
 
-  if (!userId) {
-    socket.send(JSON.stringify({ type: "error", message: "userId required" }));
+  if (INTERNAL_TOKEN && !verifyChatSig(userId, sig)) {
+    socket.send(JSON.stringify({ type: "error", message: "Unauthorized" }));
     socket.close();
     return;
   }

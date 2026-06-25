@@ -1,30 +1,44 @@
 import Docker from "dockerode";
-import type { AgentProvisioner, AgentInstance, InstanceStatus, HealthCheck } from "./interface.js";
+import { randomBytes } from "crypto";
+import type { AgentProvisioner, AgentInstance, InstanceStatus, HealthCheck, ProvisionOptions } from "./interface.js";
 
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 
 const HERMES_IMAGE = "hermes-agent:latest";
 const CONTAINER_PREFIX = "hermes-user-";
+const HERMES_API_PORT = 8642; // Hermes API server port inside the container
 
 function containerName(userId: string) {
   return `${CONTAINER_PREFIX}${userId}`;
 }
 
 export class DockerProvisioner implements AgentProvisioner {
-  async provision(userId: string, _plan: string): Promise<AgentInstance> {
+  async provision(userId: string, _plan: string, options?: ProvisionOptions): Promise<AgentInstance> {
     const name = containerName(userId);
-    const port = 3100 + Math.floor(Math.random() * 900);
+    // Host port that maps to the container's Hermes API server (8642)
+    const hostPort = 3100 + Math.floor(Math.random() * 900);
+    // Per-container bearer token for the Hermes gateway
+    const apiKey = randomBytes(24).toString("hex");
+
+    const env = [
+      `HERMES_USER_ID=${userId}`,
+      "API_SERVER_ENABLED=true",
+      `API_SERVER_PORT=${HERMES_API_PORT}`,
+      "API_SERVER_HOST=0.0.0.0",
+      `API_SERVER_KEY=${apiKey}`,
+      "API_SERVER_CORS_ORIGINS=*",
+    ];
+    if (options?.modelKey) {
+      env.push(`OPENROUTER_API_KEY=${options.modelKey}`);
+    }
 
     const container = await docker.createContainer({
       Image: HERMES_IMAGE,
       name,
-      Env: [
-        `HERMES_USER_ID=${userId}`,
-        `HERMES_PORT=${port}`,
-      ],
-      ExposedPorts: { [`${port}/tcp`]: {} },
+      Env: env,
+      ExposedPorts: { [`${HERMES_API_PORT}/tcp`]: {} },
       HostConfig: {
-        PortBindings: { [`${port}/tcp`]: [{ HostPort: String(port) }] },
+        PortBindings: { [`${HERMES_API_PORT}/tcp`]: [{ HostPort: String(hostPort) }] },
         Memory: 512 * 1024 * 1024,
         NanoCpus: 1_000_000_000,
         PidsLimit: 256,
@@ -42,7 +56,8 @@ export class DockerProvisioner implements AgentProvisioner {
     return {
       instanceId: container.id,
       host: "127.0.0.1",
-      port,
+      port: hostPort,
+      apiKey,
       containerId: container.id,
     };
   }

@@ -16,10 +16,15 @@ async function workerFetch(path: string, options: RequestInit = {}) {
   return res.json();
 }
 
-export async function enqueueProvision(userId: string, plan: string, callbackUrl?: string) {
+export async function enqueueProvision(
+  userId: string,
+  plan: string,
+  modelKey?: string,
+  callbackUrl?: string,
+) {
   return workerFetch("/worker/provision", {
     method: "POST",
-    body: JSON.stringify({ userId, plan, callbackUrl }),
+    body: JSON.stringify({ userId, plan, modelKey, callbackUrl }),
   });
 }
 

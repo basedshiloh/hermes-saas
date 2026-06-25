@@ -7,6 +7,7 @@ interface ContainerInfo {
   host: string;
   port: number;
   containerId: string;
+  apiKey: string; // Hermes API_SERVER_KEY (bearer token for the agent's gateway)
 }
 
 const containerRegistry = new Map<string, ContainerInfo>();
@@ -34,17 +35,27 @@ async function ensureContainerRunning(userId: string): Promise<ContainerInfo> {
   return info;
 }
 
+// Hermes exposes an OpenAI-compatible API server at POST /v1/chat/completions
 async function forwardToHermes(
   containerInfo: ContainerInfo,
   message: string,
+  sessionId: string,
 ): Promise<string> {
-  const url = `http://${containerInfo.host}:${containerInfo.port}/api/chat`;
+  const url = `http://${containerInfo.host}:${containerInfo.port}/v1/chat/completions`;
 
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${containerInfo.apiKey}`,
+        "X-Hermes-Session-Id": sessionId,
+      },
+      body: JSON.stringify({
+        model: "hermes-agent",
+        messages: [{ role: "user", content: message }],
+        stream: false,
+      }),
     });
 
     if (!res.ok) {
@@ -52,7 +63,12 @@ async function forwardToHermes(
     }
 
     const data = await res.json();
-    return data.response || data.message || JSON.stringify(data);
+    return (
+      data.choices?.[0]?.message?.content ||
+      data.response ||
+      data.message ||
+      JSON.stringify(data)
+    );
   } catch (err) {
     return `[Agent error: ${err instanceof Error ? err.message : String(err)}. The agent may still be starting up — try again in a moment.]`;
   }
@@ -62,6 +78,9 @@ export async function handleChatConnection(
   socket: WebSocket,
   userId: string,
 ) {
+  // One chat session per WS connection
+  const sessionId = `${userId}-${Date.now()}`;
+
   socket.send(JSON.stringify({
     type: "status",
     status: "connecting",
@@ -96,7 +115,7 @@ export async function handleChatConnection(
         message: "Hermes is thinking...",
       }));
 
-      const response = await forwardToHermes(containerInfo, userMessage);
+      const response = await forwardToHermes(containerInfo, userMessage, sessionId);
 
       socket.send(JSON.stringify({
         type: "message",

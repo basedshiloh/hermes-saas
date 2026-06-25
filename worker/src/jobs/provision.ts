@@ -7,6 +7,7 @@ const provisioner = new DockerProvisioner();
 export interface ProvisionJobData {
   userId: string;
   plan: string;
+  modelKey?: string;
   callbackUrl?: string;
 }
 
@@ -34,7 +35,7 @@ async function updateStage(job: Job, stageIndex: number) {
 }
 
 export async function processProvisionJob(job: Job<ProvisionJobData>) {
-  const { userId, plan } = job.data;
+  const { userId, plan, modelKey } = job.data;
 
   try {
     await updateStage(job, 0); // queued
@@ -42,7 +43,7 @@ export async function processProvisionJob(job: Job<ProvisionJobData>) {
     await updateStage(job, 2); // pulling_image
     await updateStage(job, 3); // starting_container
 
-    const instance = await provisioner.provision(userId, plan);
+    const instance = await provisioner.provision(userId, plan, { modelKey });
 
     await updateStage(job, 4); // installing_hermes
     await updateStage(job, 5); // configuring_gateway
@@ -61,12 +62,16 @@ export async function processProvisionJob(job: Job<ProvisionJobData>) {
       host: instance.host,
       port: instance.port,
       containerId: instance.containerId!,
+      apiKey: instance.apiKey,
     });
 
     if (job.data.callbackUrl) {
       await fetch(job.data.callbackUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Internal-Token": process.env.INTERNAL_TOKEN || "",
+        },
         body: JSON.stringify({
           userId,
           instanceId: instance.instanceId,
