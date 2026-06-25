@@ -19,5 +19,13 @@
   "/(marketing)/team/page": "/team",
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
-  "/favicon.ico/route": "/favicon.ico"
+  "/api/billing/checkout/route": "/api/billing/checkout",
+  "/api/instance/route": "/api/instance",
+  "/api/keys/route": "/api/keys",
+  "/api/packs/route": "/api/packs",
+  "/api/webhooks/clerk/route": "/api/webhooks/clerk",
+  "/api/webhooks/stripe/route": "/api/webhooks/stripe",
+  "/favicon.ico/route": "/favicon.ico",
+  "/sign-in/[[...sign-in]]/page": "/sign-in/[[...sign-in]]",
+  "/sign-up/[[...sign-up]]/page": "/sign-up/[[...sign-up]]"
 }

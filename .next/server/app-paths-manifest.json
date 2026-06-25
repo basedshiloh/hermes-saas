@@ -19,5 +19,13 @@
   "/(marketing)/team/page": "app/(marketing)/team/page.js",
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/api/billing/checkout/route": "app/api/billing/checkout/route.js",
+  "/api/instance/route": "app/api/instance/route.js",
+  "/api/keys/route": "app/api/keys/route.js",
+  "/api/packs/route": "app/api/packs/route.js",
+  "/api/webhooks/clerk/route": "app/api/webhooks/clerk/route.js",
+  "/api/webhooks/stripe/route": "app/api/webhooks/stripe/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/sign-in/[[...sign-in]]/page": "app/sign-in/[[...sign-in]]/page.js",
+  "/sign-up/[[...sign-up]]/page": "app/sign-up/[[...sign-up]]/page.js"
 }
