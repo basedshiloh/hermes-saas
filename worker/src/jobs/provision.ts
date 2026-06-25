@@ -1,5 +1,6 @@
 import { Job } from "bullmq";
 import { DockerProvisioner } from "../provisioners/docker.js";
+import { registerContainer } from "../chat-proxy.js";
 
 const provisioner = new DockerProvisioner();
 
@@ -54,6 +55,13 @@ export async function processProvisionJob(job: Job<ProvisionJobData>) {
     }
 
     await updateStage(job, 7); // ready
+
+    // Register container for chat proxy
+    registerContainer(userId, {
+      host: instance.host,
+      port: instance.port,
+      containerId: instance.containerId!,
+    });
 
     if (job.data.callbackUrl) {
       await fetch(job.data.callbackUrl, {

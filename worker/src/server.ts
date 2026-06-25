@@ -5,6 +5,7 @@ import websocket from "@fastify/websocket";
 import { Queue, Worker } from "bullmq";
 import { processProvisionJob, type ProvisionJobData } from "./jobs/provision.js";
 import { DockerProvisioner } from "./provisioners/docker.js";
+import { handleChatConnection, registerContainer } from "./chat-proxy.js";
 
 const PORT = parseInt(process.env.PORT || "4000");
 const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
@@ -27,6 +28,8 @@ await app.register(websocket);
 
 app.addHook("onRequest", async (request, reply) => {
   if (request.url === "/worker/health") return;
+  // Chat WS uses query param token
+  if (request.url.startsWith("/worker/chat")) return;
 
   const token = request.headers["x-internal-token"];
   if (INTERNAL_TOKEN && token !== INTERNAL_TOKEN) {
@@ -96,6 +99,36 @@ app.get("/worker/progress/:jobId", { websocket: true }, (socket, request) => {
   }, 1000);
 
   socket.on("close", () => clearInterval(interval));
+});
+
+// Register a container for a user (called after provisioning)
+app.post("/worker/register", async (request) => {
+  const { userId, host, port, containerId } = request.body as {
+    userId: string; host: string; port: number; containerId: string;
+  };
+  registerContainer(userId, { host, port, containerId });
+  return { status: "registered" };
+});
+
+// Chat WebSocket — authenticates via query param token + userId
+app.get("/worker/chat", { websocket: true }, (socket, request) => {
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const token = url.searchParams.get("token");
+  const userId = url.searchParams.get("userId");
+
+  if (INTERNAL_TOKEN && token !== INTERNAL_TOKEN) {
+    socket.send(JSON.stringify({ type: "error", message: "Unauthorized" }));
+    socket.close();
+    return;
+  }
+
+  if (!userId) {
+    socket.send(JSON.stringify({ type: "error", message: "userId required" }));
+    socket.close();
+    return;
+  }
+
+  handleChatConnection(socket, userId);
 });
 
 app.listen({ port: PORT, host: "0.0.0.0" }, (err) => {

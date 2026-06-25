@@ -1,7 +1,20 @@
 import { cn } from '@/src/utils/cn';
-import type { MockMessage } from '@/src/data/mock-dashboard';
 
-export default function MessageBubble({ message }: { message: MockMessage }) {
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+export default function MessageBubble({ message }: { message: ChatMessage }) {
+  if (message.role === 'system') {
+    return (
+      <div className="border-primary-400/20 bg-primary-600/10 text-tagline-2 font-inter-tight text-primary-200 rounded-xl border p-4 font-normal">
+        {message.content}
+      </div>
+    );
+  }
+
   const isUser = message.role === 'user';
 
   return (
