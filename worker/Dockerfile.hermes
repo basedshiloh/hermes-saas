@@ -16,6 +16,11 @@ WORKDIR /home/hermes
 
 RUN curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash || true
 
+# Default to an economical model so small BYOK balances work out of the box.
+# Per-pack model overrides can be layered in later.
+RUN bash -lc "hermes config set model.default deepseek/deepseek-v4-flash" \
+    || sed -i 's|^  default: .*|  default: "deepseek/deepseek-v4-flash"|' ~/.hermes/config.yaml
+
 # Hermes API server port (controlled via API_SERVER_* env vars at runtime)
 EXPOSE 8642
 
