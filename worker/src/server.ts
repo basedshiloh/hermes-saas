@@ -53,33 +53,33 @@ app.get("/worker/health", async () => {
 });
 
 app.post("/worker/provision", async (request) => {
-  const { userId, plan, modelKey, callbackUrl } = request.body as ProvisionJobData;
-  const job = await provisionQueue.add("provision", { userId, plan, modelKey, callbackUrl });
+  const { agentId, userId, plan, modelKey, callbackUrl } = request.body as ProvisionJobData;
+  const job = await provisionQueue.add("provision", { agentId, userId, plan, modelKey, callbackUrl });
   return { jobId: job.id, status: "queued" };
 });
 
 app.post("/worker/start", async (request) => {
-  const { instanceId } = request.body as { instanceId: string };
-  await provisioner.start(instanceId);
+  const { containerId } = request.body as { containerId: string };
+  await provisioner.start(containerId);
   return { status: "started" };
 });
 
 app.post("/worker/stop", async (request) => {
-  const { instanceId } = request.body as { instanceId: string };
-  await provisioner.stop(instanceId);
+  const { containerId } = request.body as { containerId: string };
+  await provisioner.stop(containerId);
   return { status: "stopped" };
 });
 
 app.post("/worker/destroy", async (request) => {
-  const { instanceId } = request.body as { instanceId: string };
-  await provisioner.destroy(instanceId);
+  const { containerId } = request.body as { containerId: string };
+  await provisioner.destroy(containerId);
   return { status: "destroyed" };
 });
 
-app.get("/worker/status/:instanceId", async (request) => {
-  const { instanceId } = request.params as { instanceId: string };
-  const status = await provisioner.status(instanceId);
-  return { instanceId, status };
+app.get("/worker/status/:containerId", async (request) => {
+  const { containerId } = request.params as { containerId: string };
+  const status = await provisioner.status(containerId);
+  return { containerId, status };
 });
 
 app.get("/worker/progress/:jobId", { websocket: true }, (socket, request) => {
@@ -112,34 +112,36 @@ app.get("/worker/progress/:jobId", { websocket: true }, (socket, request) => {
   socket.on("close", () => clearInterval(interval));
 });
 
-// Register a container for a user (manual / recovery path)
+// Register a container for an agent (manual / recovery path)
 app.post("/worker/register", async (request) => {
-  const { userId, host, port, containerId, apiKey } = request.body as {
-    userId: string; host: string; port: number; containerId: string; apiKey: string;
+  const { agentId, host, port, containerId, apiKey } = request.body as {
+    agentId: string; host: string; port: number; containerId: string; apiKey: string;
   };
-  registerContainer(userId, { host, port, containerId, apiKey });
+  registerContainer(agentId, { host, port, containerId, apiKey });
   return { status: "registered" };
 });
 
-// Chat WebSocket — authenticates via HMAC signature of the userId
+// Chat WebSocket — authenticates via HMAC signature of the agentId. Only the
+// Vercel app (holding the shared secret) can mint a valid sig, and it only does
+// so for agents the signed-in user owns.
 app.get("/worker/chat", { websocket: true }, (socket, request) => {
   const url = new URL(request.url, `http://${request.headers.host}`);
   const sig = url.searchParams.get("sig") || "";
-  const userId = url.searchParams.get("userId") || "";
+  const agentId = url.searchParams.get("agentId") || "";
 
-  if (!userId) {
-    socket.send(JSON.stringify({ type: "error", message: "userId required" }));
+  if (!agentId) {
+    socket.send(JSON.stringify({ type: "error", message: "agentId required" }));
     socket.close();
     return;
   }
 
-  if (INTERNAL_TOKEN && !verifyChatSig(userId, sig)) {
+  if (INTERNAL_TOKEN && !verifyChatSig(agentId, sig)) {
     socket.send(JSON.stringify({ type: "error", message: "Unauthorized" }));
     socket.close();
     return;
   }
 
-  handleChatConnection(socket, userId);
+  handleChatConnection(socket, agentId);
 });
 
 app.listen({ port: PORT, host: "0.0.0.0" }, (err) => {

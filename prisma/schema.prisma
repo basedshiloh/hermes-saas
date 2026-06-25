@@ -16,7 +16,7 @@ model User {
   updatedAt       DateTime @updatedAt
 
   subscription    Subscription?
-  agentInstance   AgentInstance?
+  agentInstances  AgentInstance[]
   modelKeys       ModelKey[]
   packsEnabled    PackEnabled[]
   auditLogs       AuditLog[]
@@ -55,8 +55,11 @@ enum SubscriptionStatus {
 
 model AgentInstance {
   id              String        @id @default(cuid())
-  userId          String        @unique
+  userId          String
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String        @default("My Agent")
+  packId          String        @default("general")
+  model           String?
   provisionerType String        @default("docker")
   containerId     String?
   vmId            String?
@@ -71,6 +74,7 @@ model AgentInstance {
   provisioningJobs ProvisioningJob[]
   usageEvents      UsageEvent[]
 
+  @@index([userId])
   @@map("agent_instances")
 }
 

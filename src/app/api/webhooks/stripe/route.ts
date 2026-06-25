@@ -1,6 +1,5 @@
 import { db } from "@/src/lib/db";
 import { getStripe } from "@/src/lib/stripe";
-import { enqueueProvision } from "@/src/lib/worker-client";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -50,17 +49,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      await db.agentInstance.upsert({
-        where: { userId },
-        create: { userId, state: "PROVISIONING" },
-        update: { state: "PROVISIONING" },
-      });
-
-      try {
-        await enqueueProvision(userId, plan);
-      } catch {
-        // Worker service may not be reachable yet — instance stays in PROVISIONING
-      }
+      // Agents are created explicitly by the user from the dashboard
+      // ("Deploy Agent"), not auto-provisioned on subscription.
 
       break;
     }

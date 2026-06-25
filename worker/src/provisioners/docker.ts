@@ -5,20 +5,30 @@ import type { AgentProvisioner, AgentInstance, InstanceStatus, HealthCheck, Prov
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 
 const HERMES_IMAGE = "hermes-agent:latest";
-const CONTAINER_PREFIX = "hermes-user-";
+const CONTAINER_PREFIX = "hermes-agent-";
 const HERMES_API_PORT = 8642; // Hermes API server port inside the container
 
-function containerName(userId: string) {
-  return `${CONTAINER_PREFIX}${userId}`;
+function containerName(agentId: string) {
+  return `${CONTAINER_PREFIX}${agentId}`;
+}
+
+export interface ContainerInfo {
+  host: string;
+  port: number;
+  containerId: string;
+  apiKey: string;
 }
 
 export class DockerProvisioner implements AgentProvisioner {
-  async provision(userId: string, _plan: string, options?: ProvisionOptions): Promise<AgentInstance> {
-    const name = containerName(userId);
-    // Host port that maps to the container's Hermes API server (8642)
-    const hostPort = 3100 + Math.floor(Math.random() * 900);
-    // Per-container bearer token for the Hermes gateway
-    const apiKey = randomBytes(24).toString("hex");
+  async provision(
+    agentId: string,
+    userId: string,
+    _plan: string,
+    options?: ProvisionOptions,
+  ): Promise<AgentInstance> {
+    const name = containerName(agentId);
+    const hostPort = 3100 + Math.floor(Math.random() * 5000);
+    const apiKey = randomBytes(32).toString("hex");
 
     const env = [
       `HERMES_USER_ID=${userId}`,
@@ -27,13 +37,16 @@ export class DockerProvisioner implements AgentProvisioner {
       "API_SERVER_HOST=0.0.0.0",
       `API_SERVER_KEY=${apiKey}`,
       "API_SERVER_CORS_ORIGINS=*",
-      // Auth is enforced by the API server bearer key; allow the gateway itself
-      // so the OpenAI-compatible endpoint accepts requests.
       "GATEWAY_ALLOW_ALL_USERS=true",
     ];
     if (options?.modelKey) {
       env.push(`OPENROUTER_API_KEY=${options.modelKey}`);
     }
+
+    // Remove any stale container with the same name
+    try {
+      await docker.getContainer(name).remove({ force: true });
+    } catch { /* none existed */ }
 
     const container = await docker.createContainer({
       Image: HERMES_IMAGE,
@@ -49,7 +62,9 @@ export class DockerProvisioner implements AgentProvisioner {
         RestartPolicy: { Name: "unless-stopped" },
       },
       Labels: {
+        "hermes.agentId": agentId,
         "hermes.userId": userId,
+        "hermes.apiKey": apiKey,
         "hermes.managed": "true",
       },
     });
@@ -65,38 +80,54 @@ export class DockerProvisioner implements AgentProvisioner {
     };
   }
 
-  async start(instanceId: string): Promise<void> {
-    const container = docker.getContainer(instanceId);
-    await container.start();
+  // Rebuild connection info for an agent's container directly from Docker, so
+  // chat survives a worker restart (in-memory registry loss).
+  async recover(agentId: string): Promise<ContainerInfo | null> {
+    try {
+      const container = docker.getContainer(containerName(agentId));
+      const info = await container.inspect();
+      const apiKey = info.Config.Labels?.["hermes.apiKey"];
+      const bindings = info.HostConfig?.PortBindings?.[`${HERMES_API_PORT}/tcp`];
+      const hostPort = bindings?.[0]?.HostPort;
+      if (!apiKey || !hostPort) return null;
+      return {
+        host: "127.0.0.1",
+        port: parseInt(hostPort),
+        containerId: info.Id,
+        apiKey,
+      };
+    } catch {
+      return null;
+    }
   }
 
-  async stop(instanceId: string): Promise<void> {
-    const container = docker.getContainer(instanceId);
-    await container.stop({ t: 10 });
+  async start(containerId: string): Promise<void> {
+    await docker.getContainer(containerId).start();
   }
 
-  async destroy(instanceId: string): Promise<void> {
-    const container = docker.getContainer(instanceId);
-    try { await container.stop({ t: 5 }); } catch { /* might already be stopped */ }
+  async stop(containerId: string): Promise<void> {
+    await docker.getContainer(containerId).stop({ t: 10 });
+  }
+
+  async destroy(containerId: string): Promise<void> {
+    const container = docker.getContainer(containerId);
+    try { await container.stop({ t: 5 }); } catch { /* maybe already stopped */ }
     await container.remove({ force: true });
   }
 
-  async status(instanceId: string): Promise<InstanceStatus> {
+  async status(containerId: string): Promise<InstanceStatus> {
     try {
-      const container = docker.getContainer(instanceId);
-      const info = await container.inspect();
+      const info = await docker.getContainer(containerId).inspect();
       if (info.State.Running) return "running";
-      if (info.State.Paused) return "sleeping";
       return "sleeping";
     } catch {
       return "error";
     }
   }
 
-  async health(instanceId: string): Promise<HealthCheck> {
+  async health(containerId: string): Promise<HealthCheck> {
     try {
-      const container = docker.getContainer(instanceId);
-      const info = await container.inspect();
+      const info = await docker.getContainer(containerId).inspect();
       return {
         healthy: info.State.Running,
         uptime: info.State.Running

@@ -32,7 +32,7 @@ function runMockDemo(
   return () => clearInterval(interval);
 }
 
-export default function ChatPanel() {
+export default function ChatPanel({ agentId }: { agentId?: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState<string | null>(null);
@@ -54,9 +54,14 @@ export default function ChatPanel() {
     let cancelled = false;
 
     async function connect() {
+      if (!agentId) {
+        cleanupMock = runMockDemo(setMessages, setStatus);
+        return;
+      }
+
       let wsUrl: string | null = null;
       try {
-        const res = await fetch('/api/chat/connect');
+        const res = await fetch(`/api/chat/connect?agentId=${encodeURIComponent(agentId)}`);
         const data = await res.json();
         wsUrl = data.wsUrl;
       } catch {
@@ -123,7 +128,7 @@ export default function ChatPanel() {
       if (ws) ws.close();
       if (cleanupMock) cleanupMock();
     };
-  }, []);
+  }, [agentId]);
 
   function handleSend() {
     if (!input.trim()) return;

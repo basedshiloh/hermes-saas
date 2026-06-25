@@ -1,29 +1,25 @@
 import type { WebSocket, RawData } from "ws";
-import { DockerProvisioner } from "./provisioners/docker.js";
+import { DockerProvisioner, type ContainerInfo } from "./provisioners/docker.js";
 
 const provisioner = new DockerProvisioner();
 
-interface ContainerInfo {
-  host: string;
-  port: number;
-  containerId: string;
-  apiKey: string; // Hermes API_SERVER_KEY (bearer token for the agent's gateway)
-}
-
+// agentId -> container connection info (in-memory cache; recoverable from Docker)
 const containerRegistry = new Map<string, ContainerInfo>();
 
-export function registerContainer(userId: string, info: ContainerInfo) {
-  containerRegistry.set(userId, info);
+export function registerContainer(agentId: string, info: ContainerInfo) {
+  containerRegistry.set(agentId, info);
 }
 
-export function getContainer(userId: string): ContainerInfo | undefined {
-  return containerRegistry.get(userId);
-}
-
-async function ensureContainerRunning(userId: string): Promise<ContainerInfo> {
-  const info = containerRegistry.get(userId);
+async function resolveContainer(agentId: string): Promise<ContainerInfo> {
+  let info = containerRegistry.get(agentId);
   if (!info) {
-    throw new Error("No container registered for this user");
+    // Cache miss (e.g. after a worker restart) — rebuild from Docker
+    const recovered = await provisioner.recover(agentId);
+    if (!recovered) {
+      throw new Error("Agent not found or not deployed yet");
+    }
+    info = recovered;
+    containerRegistry.set(agentId, info);
   }
 
   const status = await provisioner.status(info.containerId);
@@ -31,7 +27,6 @@ async function ensureContainerRunning(userId: string): Promise<ContainerInfo> {
     await provisioner.start(info.containerId);
     await new Promise((r) => setTimeout(r, 3000));
   }
-
   return info;
 }
 
@@ -74,22 +69,18 @@ async function forwardToHermes(
   }
 }
 
-export async function handleChatConnection(
-  socket: WebSocket,
-  userId: string,
-) {
-  // One chat session per WS connection
-  const sessionId = `${userId}-${Date.now()}`;
+export async function handleChatConnection(socket: WebSocket, agentId: string) {
+  const sessionId = `${agentId}-${Date.now()}`;
 
   socket.send(JSON.stringify({
     type: "status",
     status: "connecting",
-    message: "Connecting to your agent...",
+    message: "Waking your agent...",
   }));
 
   let containerInfo: ContainerInfo;
   try {
-    containerInfo = await ensureContainerRunning(userId);
+    containerInfo = await resolveContainer(agentId);
     socket.send(JSON.stringify({
       type: "status",
       status: "connected",

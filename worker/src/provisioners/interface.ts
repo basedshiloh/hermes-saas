@@ -20,10 +20,11 @@ export interface HealthCheck {
 }
 
 export interface AgentProvisioner {
-  provision(userId: string, plan: string, options?: ProvisionOptions): Promise<AgentInstance>;
-  start(instanceId: string): Promise<void>;
-  stop(instanceId: string): Promise<void>;
-  destroy(instanceId: string): Promise<void>;
-  status(instanceId: string): Promise<InstanceStatus>;
-  health(instanceId: string): Promise<HealthCheck>;
+  // agentId is the canonical per-agent identifier (DB AgentInstance.id)
+  provision(agentId: string, userId: string, plan: string, options?: ProvisionOptions): Promise<AgentInstance>;
+  start(containerId: string): Promise<void>;
+  stop(containerId: string): Promise<void>;
+  destroy(containerId: string): Promise<void>;
+  status(containerId: string): Promise<InstanceStatus>;
+  health(containerId: string): Promise<HealthCheck>;
 }

@@ -3,14 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/src/utils/cn';
-import type { PackTab } from '@/src/data/mock-dashboard';
 
-const mainLinks = [
-  { id: 'chat', title: 'Chat', href: '/dashboard', iconClass: 'icon-message-square' },
+const links = [
+  { id: 'agents', title: 'My Agents', href: '/dashboard', iconClass: 'icon-grid' },
   { id: 'settings', title: 'Settings', href: '/dashboard/settings', iconClass: 'icon-settings' },
 ];
 
-export default function Sidebar({ packTabs }: { packTabs?: PackTab[] }) {
+export default function Sidebar() {
   const pathname = usePathname();
 
   return (
@@ -26,10 +25,10 @@ export default function Sidebar({ packTabs }: { packTabs?: PackTab[] }) {
 
       <nav className="flex-1 overflow-y-auto px-3 py-5">
         <div className="space-y-1">
-          {mainLinks.map((link) => {
+          {links.map((link) => {
             const isActive =
               link.href === '/dashboard'
-                ? pathname === '/dashboard'
+                ? pathname === '/dashboard' || pathname.startsWith('/dashboard/agents')
                 : pathname.startsWith(link.href);
             return (
               <Link
@@ -48,42 +47,14 @@ export default function Sidebar({ packTabs }: { packTabs?: PackTab[] }) {
             );
           })}
         </div>
-
-        {packTabs && packTabs.length > 0 && (
-          <div className="mt-7">
-            <p className="text-tagline-3 font-inter-tight text-primary-50/40 mb-2.5 px-3.5 font-normal uppercase tracking-wider">
-              Tools
-            </p>
-            <div className="space-y-1">
-              {packTabs.map((tab) => {
-                const href = `/dashboard/${tab.id}`;
-                const isActive = pathname === href;
-                return (
-                  <Link
-                    key={tab.id}
-                    href={href}
-                    className={cn(
-                      'text-tagline-2 font-inter-tight flex items-center gap-3 rounded-xl px-3.5 py-2.5 font-normal transition-colors',
-                      isActive
-                        ? 'bg-background-7 text-accent'
-                        : 'text-primary-50/60 hover:bg-background-7 hover:text-accent',
-                    )}
-                  >
-                    <span>{tab.title}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </nav>
 
       <div className="border-stroke-5 border-t px-3 py-3">
         <Link
-          href="/dashboard/setup"
-          className="text-tagline-2 font-inter-tight text-primary-50/40 hover:text-primary-50/70 flex items-center gap-2 rounded-xl px-3.5 py-2.5 font-normal transition-colors"
+          href="/dashboard/new"
+          className="bg-secondary text-tagline-2 font-ibm-plex-mono flex items-center justify-center gap-2 rounded-full py-2.5 font-normal text-white transition-opacity hover:opacity-90"
         >
-          <span>+ Add Pack</span>
+          + Deploy Agent
         </Link>
       </div>
     </aside>

@@ -16,28 +16,36 @@ async function workerFetch(path: string, options: RequestInit = {}) {
   return res.json();
 }
 
-export async function enqueueProvision(
-  userId: string,
-  plan: string,
-  modelKey?: string,
-  callbackUrl?: string,
-) {
+export async function enqueueProvision(args: {
+  agentId: string;
+  userId: string;
+  plan: string;
+  modelKey?: string;
+  callbackUrl?: string;
+}) {
   return workerFetch("/worker/provision", {
     method: "POST",
-    body: JSON.stringify({ userId, plan, modelKey, callbackUrl }),
+    body: JSON.stringify(args),
   });
 }
 
-export async function startInstance(instanceId: string) {
+export async function startContainer(containerId: string) {
   return workerFetch("/worker/start", {
     method: "POST",
-    body: JSON.stringify({ instanceId }),
+    body: JSON.stringify({ containerId }),
   });
 }
 
-export async function stopInstance(instanceId: string) {
+export async function stopContainer(containerId: string) {
   return workerFetch("/worker/stop", {
     method: "POST",
-    body: JSON.stringify({ instanceId }),
+    body: JSON.stringify({ containerId }),
+  });
+}
+
+export async function destroyContainer(containerId: string) {
+  return workerFetch("/worker/destroy", {
+    method: "POST",
+    body: JSON.stringify({ containerId }),
   });
 }

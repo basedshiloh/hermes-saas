@@ -1,7 +1,7 @@
 import type { AgentProvisioner, AgentInstance, InstanceStatus, HealthCheck, ProvisionOptions } from "./interface.js";
 
 export class HetznerVmProvisioner implements AgentProvisioner {
-  async provision(_userId: string, _plan: string, _options?: ProvisionOptions): Promise<AgentInstance> {
+  async provision(_agentId: string, _userId: string, _plan: string, _options?: ProvisionOptions): Promise<AgentInstance> {
     throw new Error("HetznerVmProvisioner not implemented yet");
   }
   async start(_instanceId: string): Promise<void> {
