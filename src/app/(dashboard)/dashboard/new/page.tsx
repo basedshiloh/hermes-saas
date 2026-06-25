@@ -2,14 +2,23 @@
 
 import { PACKS } from '@/src/data/mock-dashboard';
 import { cn } from '@/src/utils/cn';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function NewAgentPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [packId, setPackId] = useState('seo');
   const [deploying, setDeploying] = useState(false);
+  const [hasKey, setHasKey] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch('/api/keys')
+      .then((r) => r.json())
+      .then((d) => setHasKey((d.keys ?? []).length > 0))
+      .catch(() => setHasKey(null));
+  }, []);
 
   async function handleDeploy() {
     setDeploying(true);
@@ -38,6 +47,20 @@ export default function NewAgentPage() {
           Pick what your agent does. We pre-configure the tools and skills — you just name it and deploy.
         </p>
       </div>
+
+      {hasKey === false && (
+        <div className="border-ns-yellow/30 bg-ns-yellow/10 flex items-center justify-between gap-4 rounded-xl border p-4">
+          <p className="text-tagline-3 font-inter-tight text-ns-yellow font-normal">
+            You haven&apos;t added a model API key yet. Your agent needs one to respond.
+          </p>
+          <Link
+            href="/dashboard/settings"
+            className="text-tagline-3 font-inter-tight text-accent shrink-0 font-medium underline"
+          >
+            Add key
+          </Link>
+        </div>
+      )}
 
       <fieldset className="space-y-2">
         <label className="text-tagline-2 font-inter-tight text-accent/80 block font-normal">Agent name</label>
