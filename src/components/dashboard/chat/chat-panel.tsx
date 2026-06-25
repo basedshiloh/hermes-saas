@@ -30,8 +30,16 @@ export default function ChatPanel() {
   }, [messages, status, scrollToBottom]);
 
   useEffect(() => {
-    if (!WS_URL) {
-      // No WebSocket URL configured — show mock conversation
+    // Browsers block insecure ws:// connections from an https:// page (mixed
+    // content), and new WebSocket() throws synchronously. Fall back to the mock
+    // demo unless we have a usable URL for the current page protocol.
+    const pageIsHttps =
+      typeof window !== 'undefined' && window.location.protocol === 'https:';
+    const wsUsable =
+      WS_URL && !(pageIsHttps && WS_URL.startsWith('ws://'));
+
+    if (!wsUsable) {
+      // No usable WebSocket URL — show mock conversation
       let idx = 0;
       const interval = setInterval(() => {
         if (idx < MOCK_CONVERSATION.length) {
@@ -50,7 +58,20 @@ export default function ChatPanel() {
     }
 
     // Real WebSocket connection
-    const ws = new WebSocket(WS_URL);
+    let ws: WebSocket;
+    try {
+      ws = new WebSocket(WS_URL);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: 'system',
+          content: 'Could not connect to your agent. Showing demo mode.',
+        },
+      ]);
+      return;
+    }
     wsRef.current = ws;
 
     ws.onopen = () => {
