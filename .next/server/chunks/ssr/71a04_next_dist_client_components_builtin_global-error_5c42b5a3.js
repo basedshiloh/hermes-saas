@@ -1,3 +1,0 @@
-module.exports=[44638,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(79727);a.n(d("[project]/hermes saas/hermes-saas/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},75218,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(79727);a.n(d("[project]/hermes saas/hermes-saas/node_modules/next/dist/client/components/builtin/global-error.js"))},72244,a=>{"use strict";a.i(44638);var b=a.i(75218);a.n(b)}];
-
-//# sourceMappingURL=71a04_next_dist_client_components_builtin_global-error_5c42b5a3.js.map
