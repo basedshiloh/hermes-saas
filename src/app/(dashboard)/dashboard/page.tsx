@@ -79,13 +79,11 @@ export default function AgentsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {agents.map((agent) => {
-            const clickable = agent.state === 'RUNNING' || agent.state === 'SLEEPING';
-            const card = (
-              <div
-                className={cn(
-                  'border-stroke-5 bg-background-7 space-y-4 rounded-xl border p-5 transition-all',
-                  clickable ? 'hover:border-stroke-7 cursor-pointer' : 'opacity-80',
-                )}
+            return (
+              <Link
+                key={agent.id}
+                href={`/dashboard/agents/${agent.id}`}
+                className="border-stroke-5 bg-background-7 hover:border-stroke-7 block space-y-4 rounded-xl border p-5 transition-all"
               >
                 <div className="flex items-start justify-between">
                   <div className="bg-secondary flex size-11 items-center justify-center rounded-2xl">
@@ -99,14 +97,7 @@ export default function AgentsPage() {
                     {packName(agent.packId)}
                   </p>
                 </div>
-              </div>
-            );
-            return clickable ? (
-              <Link key={agent.id} href={`/dashboard/agents/${agent.id}`}>
-                {card}
               </Link>
-            ) : (
-              <div key={agent.id}>{card}</div>
             );
           })}
         </div>
