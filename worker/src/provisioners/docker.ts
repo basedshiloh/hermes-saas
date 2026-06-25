@@ -27,6 +27,9 @@ export class DockerProvisioner implements AgentProvisioner {
       "API_SERVER_HOST=0.0.0.0",
       `API_SERVER_KEY=${apiKey}`,
       "API_SERVER_CORS_ORIGINS=*",
+      // Auth is enforced by the API server bearer key; allow the gateway itself
+      // so the OpenAI-compatible endpoint accepts requests.
+      "GATEWAY_ALLOW_ALL_USERS=true",
     ];
     if (options?.modelKey) {
       env.push(`OPENROUTER_API_KEY=${options.modelKey}`);
