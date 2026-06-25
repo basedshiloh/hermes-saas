@@ -14,6 +14,7 @@ import { ButtonPrimary } from '@/src/components/shared/ui/button';
 import { mobileMenuData } from '@/src/data/mobile-meu';
 import { useNavbarScroll } from '@/src/hooks/useScrollHeader';
 import { cn } from '@/src/utils/cn';
+import { SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -133,10 +134,21 @@ const Navbar = () => {
               </ul>
             </nav>
 
-            <div className="hidden items-center justify-center xl:flex">
-              <Link href="/signup" className="inline-block" aria-label="Get started">
-                <ButtonPrimary>Get started</ButtonPrimary>
-              </Link>
+            <div className="hidden items-center justify-center gap-3 xl:flex">
+              <Show when="signed-out">
+                <SignInButton>
+                  <button className={navLinkClass}>Sign in</button>
+                </SignInButton>
+                <SignUpButton>
+                  <ButtonPrimary>Get started</ButtonPrimary>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <Link href="/dashboard">
+                  <ButtonPrimary>Dashboard</ButtonPrimary>
+                </Link>
+                <UserButton />
+              </Show>
             </div>
             <NavbarMobileMenuButton />
           </div>

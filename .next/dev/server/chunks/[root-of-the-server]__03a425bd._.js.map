@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 58, "column": 0}, "map": {"version":3,"sources":["file:///Users/narwastunagoro/hermes%20saas/hermes-saas/src/proxy.ts"],"sourcesContent":["import { clerkMiddleware, createRouteMatcher } from \"@clerk/nextjs/server\";\n\nconst isProtectedRoute = createRouteMatcher([\"/dashboard(.*)\"]);\n\nexport default clerkMiddleware(async (auth, request) => {\n  if (isProtectedRoute(request)) {\n    await auth.protect();\n  }\n});\n\nexport const config = {\n  matcher: [\n    \"/((?!_next|[^?]*\\\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)\",\n    \"/(api|trpc)(.*)\",\n    \"/__clerk/:path*\",\n  ],\n};\n"],"names":[],"mappings":";;;;;;AAAA;AAAA;;AAEA,MAAM,mBAAmB,IAAA,kOAAkB,EAAC;IAAC;CAAiB;uCAE/C,IAAA,kOAAe,EAAC,OAAO,MAAM;IAC1C,IAAI,iBAAiB,UAAU;QAC7B,MAAM,KAAK,OAAO;IACpB;AACF;AAEO,MAAM,SAAS;IACpB,SAAS;QACP;QACA;QACA;KACD;AACH"}}]
+}

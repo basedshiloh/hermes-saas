@@ -1,8 +1,7 @@
 'use client';
 
 import { cn } from '@/src/utils/cn';
-import Image from 'next/image';
-import avatarImg from '@/public/images/ns-avatar-11.jpg';
+import { UserButton } from '@clerk/nextjs';
 
 const stateConfig: Record<string, { label: string; dotClass: string }> = {
   running: { label: 'Online', dotClass: 'bg-ns-green' },
@@ -27,9 +26,11 @@ export default function Topbar({ instanceState }: { instanceState?: string }) {
         )}
       </div>
       <div className="flex items-center gap-4">
-        <figure className="border-stroke-5 size-9 overflow-hidden rounded-full border">
-          <Image src={avatarImg} alt="User" className="size-full object-cover" />
-        </figure>
+        <UserButton
+          appearance={{
+            elements: { avatarBox: 'size-9' },
+          }}
+        />
       </div>
     </header>
   );

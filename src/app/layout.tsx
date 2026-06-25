@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import { fontVariables } from "@/src/utils/font";
 import { ReactNode, Suspense } from "react";
 import "./globals.css";
@@ -10,7 +11,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontVariables} antialiased`}>
-        <Suspense>{children}</Suspense>
+        <ClerkProvider>
+          <Suspense>{children}</Suspense>
+        </ClerkProvider>
       </body>
     </html>
   );
