@@ -70,7 +70,8 @@ async function forwardToHermes(
 }
 
 export async function handleChatConnection(socket: WebSocket, agentId: string) {
-  const sessionId = `${agentId}-${Date.now()}`;
+  // Default session if the client doesn't supply one
+  const defaultSessionId = `${agentId}-${Date.now()}`;
 
   socket.send(JSON.stringify({
     type: "status",
@@ -99,6 +100,8 @@ export async function handleChatConnection(socket: WebSocket, agentId: string) {
     try {
       const parsed = JSON.parse(data.toString());
       const userMessage = parsed.message || parsed.content || data.toString();
+      // Use the client's session id so Hermes keeps per-conversation context
+      const sessionId = parsed.sessionId || defaultSessionId;
 
       socket.send(JSON.stringify({
         type: "status",

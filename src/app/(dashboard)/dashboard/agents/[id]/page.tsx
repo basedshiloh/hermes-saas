@@ -2,11 +2,12 @@
 
 import AgentStatus from '@/src/components/dashboard/agent-status';
 import ChatPanel from '@/src/components/dashboard/chat/chat-panel';
+import SessionSidebar, { type ChatSessionItem } from '@/src/components/dashboard/chat/session-sidebar';
 import ProvisioningProgress from '@/src/components/dashboard/provisioning/provisioning-progress';
 import { PACKS } from '@/src/data/mock-dashboard';
 import { cn } from '@/src/utils/cn';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Agent {
   id: string;
@@ -22,6 +23,49 @@ export default function AgentDetailPage() {
   const [agent, setAgent] = useState<Agent | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [sessions, setSessions] = useState<ChatSessionItem[]>([]);
+  const [activeSession, setActiveSession] = useState<string | null>(null);
+
+  const loadSessions = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/agents/${agentId}/sessions`);
+      const data = await res.json();
+      const list: ChatSessionItem[] = data.sessions ?? [];
+      setSessions(list);
+      setActiveSession((cur) => cur ?? list[0]?.id ?? null);
+      if (list.length === 0) {
+        const created = await fetch(`/api/agents/${agentId}/sessions`, { method: 'POST' });
+        const cd = await created.json();
+        if (cd.session) {
+          setSessions([{ id: cd.session.id, title: cd.session.title, updatedAt: cd.session.updatedAt }]);
+          setActiveSession(cd.session.id);
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [agentId]);
+
+  async function newSession() {
+    const res = await fetch(`/api/agents/${agentId}/sessions`, { method: 'POST' });
+    const data = await res.json();
+    if (data.session) {
+      setSessions((p) => [
+        { id: data.session.id, title: data.session.title, updatedAt: data.session.updatedAt },
+        ...p,
+      ]);
+      setActiveSession(data.session.id);
+    }
+  }
+
+  async function deleteSession(id: string) {
+    await fetch(`/api/sessions/${id}`, { method: 'DELETE' });
+    setSessions((p) => {
+      const next = p.filter((s) => s.id !== id);
+      if (activeSession === id) setActiveSession(next[0]?.id ?? null);
+      return next;
+    });
+  }
 
   async function load() {
     try {
@@ -48,6 +92,14 @@ export default function AgentDetailPage() {
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId]);
+
+  // Once the agent is ready, load its chat sessions
+  useEffect(() => {
+    if (agent && (agent.state === 'RUNNING' || agent.state === 'SLEEPING')) {
+      loadSessions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [agent?.state]);
 
   async function action(path: string, method = 'POST') {
     setBusy(true);
@@ -130,15 +182,40 @@ export default function AgentDetailPage() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden">
-        {isReady && <ChatPanel agentId={agent.id} />}
+      <div className="flex flex-1 overflow-hidden">
+        {isReady && (
+          <>
+            <SessionSidebar
+              sessions={sessions}
+              activeId={activeSession}
+              onSelect={setActiveSession}
+              onNew={newSession}
+              onDelete={deleteSession}
+            />
+            <div className="flex-1 overflow-hidden">
+              {activeSession ? (
+                <ChatPanel
+                  agentId={agent.id}
+                  sessionId={activeSession}
+                  onFirstMessage={loadSessions}
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <p className="text-tagline-2 font-inter-tight text-primary-50/40 font-normal">
+                    Start a new chat.
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
         {isDeploying && (
-          <div className="flex h-full items-center justify-center p-6">
+          <div className="flex h-full w-full items-center justify-center p-6">
             <ProvisioningProgress />
           </div>
         )}
         {agent.state === 'ERROR' && (
-          <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
             <p className="text-tagline-1 font-inter-tight text-ns-red font-normal">
               Deployment failed.
             </p>

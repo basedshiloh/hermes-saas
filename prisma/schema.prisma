@@ -73,9 +73,36 @@ model AgentInstance {
 
   provisioningJobs ProvisioningJob[]
   usageEvents      UsageEvent[]
+  chatSessions     ChatSession[]
 
   @@index([userId])
   @@map("agent_instances")
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  agentId   String
+  agent     AgentInstance @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  title     String        @default("New chat")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  messages  ChatMessage[]
+
+  @@index([agentId])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      String // "user" | "assistant"
+  content   String
+  createdAt DateTime    @default(now())
+
+  @@index([sessionId])
+  @@map("chat_messages")
 }
 
 enum InstanceState {
